@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bulma": "^0.7.5",
+    "gh-pages": "^2.1.1",
     "jquery": "^3.4.1",
     "local-storage": "^2.0.0",
     "react": "^16.9.0",
