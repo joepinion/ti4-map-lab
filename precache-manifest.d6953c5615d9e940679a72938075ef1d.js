@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "1446a669bf91bf070b99237cf90b99d0",
+    "revision": "b71ff16a4fa268a77ca91609a3131cab",
     "url": "/ti4-map-lab/index.html"
   },
   {
-    "revision": "8eab433be9f04659b867",
+    "revision": "b9ffab1ace2e75b6f8a2",
     "url": "/ti4-map-lab/static/css/main.71cf80b5.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/ti4-map-lab/static/js/2.351d865c.chunk.js"
   },
   {
-    "revision": "8eab433be9f04659b867",
-    "url": "/ti4-map-lab/static/js/main.f67a2270.chunk.js"
+    "revision": "b9ffab1ace2e75b6f8a2",
+    "url": "/ti4-map-lab/static/js/main.0fa71690.chunk.js"
   },
   {
     "revision": "6e44b40d84fabff429b0",
