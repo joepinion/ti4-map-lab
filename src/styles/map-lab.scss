@@ -1,0 +1,610 @@
+@import "variables";
+
+$hexSize: 55px;
+$planetSize: 25px;
+
+$mdHexSize: 80px;
+$mdPlanetSize: 35px;
+
+$lgHexSize: 110px;
+$lgPlanetSize: 40px;
+
+.map-lab .navbar {
+  border: none;
+  margin-bottom:1rem;
+}
+
+.map-lab button[disabled] {
+  background-color:black;
+}
+
+h1 {padding:1rem;}
+
+.map-lab-control-panel {
+  p.control {
+    display:flex;
+    align-items:center;
+  }
+}
+
+.for-message {
+  width:100%;
+}
+
+.wormhole {
+  width: $planetSize*.7; height: $planetSize*.7;
+  border-radius: 50%;
+  border: $planetSize/10 solid;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: $planetSize/2;
+  box-sizing: border-box;
+
+  @include md-up {
+    font-size: $mdPlanetSize/2;
+    border: $mdPlanetSize/10 solid;
+    width: $mdPlanetSize*.7; height: $mdPlanetSize*.7;
+  }
+
+  @include lg-up {
+    font-size: $lgPlanetSize/2;
+    border: $lgPlanetSize/10 solid;
+    width: $lgPlanetSize*.7; height: $lgPlanetSize*.7;
+  }
+
+  &.alpha {
+    color: orange;
+    border-color: orange;
+  }
+  &.beta {
+    color: lawngreen;
+    border-color: lawngreen;
+  }
+}
+
+.supernova {
+  width: $hexSize*.5;
+  height: $hexSize*.5;
+  background-color: red;
+  border-radius:50%;
+  box-shadow: 0px 0px $planetSize/5 $planetSize/5 orange;
+
+  @include md-up {
+    width: $mdHexSize*.5;
+    height: $mdHexSize*.5;
+    box-shadow: 0px 0px $mdPlanetSize/5 $mdPlanetSize/5 orange;
+  }
+  @include lg-up {
+    width: $lgHexSize*.5;
+    height: $lgHexSize*.5;
+    box-shadow: 0px 0px $lgPlanetSize/5 $lgPlanetSize/5 orange;
+  }
+
+}
+
+.gravity-rift {
+  width: $hexSize*.3;
+  height: $hexSize*.3;
+  background-color: black;
+  border-radius:50%;
+  box-shadow: 0px 0px $planetSize/12 $planetSize/20 white;
+
+  @include md-up {
+    width: $mdHexSize*.3;
+    height: $mdHexSize*.3;
+    box-shadow: 0px 0px $mdPlanetSize/12 $mdPlanetSize/20 white;
+  }
+  @include lg-up {
+    width: $lgHexSize*.3;
+    height: $lgHexSize*.3;
+    box-shadow: 0px 0px $lgPlanetSize/12 $lgPlanetSize/20 white;
+  }
+}
+
+.nebula {
+  width: $hexSize*.7;
+  height: $hexSize*.7;
+  background: radial-gradient(circle, rgba(230,0,0,1) 0%, rgba(230,0,0,1) 16%, rgba(249,249,249,1) 27%, rgba(249,249,249,1) 34%, rgba(148,142,0,1) 56%, rgba(148,142,0,1) 100%);
+  border-radius:50%;
+
+  @include md-up {
+    width: $mdHexSize*.7;
+    height: $mdHexSize*.7;
+  }
+  @include lg-up {
+    width: $lgHexSize*.7;
+    height: $lgHexSize*.7;
+  }
+}
+
+
+
+.asteroid-field {
+  width:50%;
+  height:50%;
+  position:relative;
+}
+
+.asteroid {
+  background-color:saddlebrown;
+  border-radius: 50%;
+  position:absolute;
+  &.a {
+    width:$planetSize/2;
+    height: $planetSize/1.5;
+    left:0;top:5px;
+  }
+  &.b {
+    width:$planetSize/1.8;
+    height: $planetSize/2;
+    right:0;top:0;
+  }
+  &.c {
+    width:$planetSize/2;
+    height: $planetSize/1.5;
+    left:15px;bottom:0;
+  }
+  &.d {
+    width:$planetSize/1.2;
+    height: $planetSize/1.4;
+    right:0;bottom:0;
+  }
+  &.e {
+    width:$planetSize/2;
+    height: $planetSize/2.2;
+    right:40%;top:10px;
+  }
+}
+
+.planet {
+  background-color: gray;
+  width: $planetSize; height: $planetSize;
+  border-radius: 50%;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: $planetSize/5 0;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+
+  @include md-up {
+      width: $mdPlanetSize; height: $mdPlanetSize;
+      padding: $mdPlanetSize/5 0;
+  }
+  @include lg-up {
+      width: $lgPlanetSize; height: $lgPlanetSize;
+      padding: $lgPlanetSize/5 0;
+  }
+
+  .value_container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  span {
+    font-size: $planetSize/2;
+    font-weight: bold;
+    z-index: 50;
+
+    @include md-up {
+      font-size: $mdPlanetSize/2;
+    }
+    @include lg-up {
+      font-size: $lgPlanetSize/2;
+    }
+
+    &.name {
+      font-size: $planetSize/4;
+      font-weight:normal;
+      text-align:center;
+      bottom:-4px;
+      line-height: $planetSize/4-1;
+      @include md-up {
+        font-size: $mdPlanetSize/4;
+        bottom:-4px;
+        line-height: $mdPlanetSize/4-1;
+      }
+      @include lg-up {
+        font-size: $lgPlanetSize/4;
+        line-height: $lgPlanetSize/4-2;
+        bottom:-9px;
+      }
+      position:absolute;
+    }
+    &.tech {
+      position: absolute;
+      font-size: $planetSize/3;
+      top:0;left:0;
+      color:white;
+      background-color:black;
+      opacity:.7;
+      border-radius:$planetSize/5;
+      z-index: 40;
+      @include md-up {
+        font-size: $mdPlanetSize/3;
+        border-radius: $mdPlanetSize/5;
+      }
+      @include lg-up {
+        font-size: $lgPlanetSize/3;
+        border-radius: $lgPlanetSize/5;
+      }
+    }
+    &.trait {
+      position: absolute;
+      font-size: $planetSize/3;
+      top:0; right:0;
+      color:white;
+      background-color:black;
+      opacity:.7;
+      border-radius:$planetSize/5;
+      z-index: 40;
+      @include md-up {
+        font-size: $mdPlanetSize/3;
+        border-radius: $mdPlanetSize/5;
+      }
+      @include lg-up {
+        font-size: $lgPlanetSize/3;
+        border-radius: $lgPlanetSize/5;
+      }
+    }
+  }
+
+  .resources {
+    color: yellow;
+  }
+  .influence {
+    color: darkblue;
+  }
+
+  &.industrial {
+    background-color: seagreen;
+  }
+  &.cultural {
+    background-color: deepskyblue;
+  }
+  &.hazardous {
+    background-color: red;
+  }
+  &.propulsion {
+    box-shadow: 0px 0px $planetSize/10 $planetSize/10 #5253ff;
+    @include md-up {
+      box-shadow: 0px 0px $mdPlanetSize/10 $mdPlanetSize/10 #5253ff;
+    }
+    @include lg-up {
+      box-shadow: 0px 0px $lgPlanetSize/10 $lgPlanetSize/10 #5253ff;
+    }
+  }
+  &.biotic {
+    box-shadow: 0px 0px $planetSize/10 $planetSize/10 green;
+    @include md-up {
+      box-shadow: 0px 0px $mdPlanetSize/10 $mdPlanetSize/10 green;
+    }
+    @include lg-up {
+      box-shadow: 0px 0px $lgPlanetSize/10 $lgPlanetSize/10 green;
+    }
+  }
+  &.cybernetic {
+    box-shadow: 0px 0px $planetSize/10 $planetSize/10 yellow;
+    @include md-up {
+      box-shadow: 0px 0px $mdPlanetSize/10 $mdPlanetSize/10 yellow;
+    }
+    @include lg-up {
+      box-shadow: 0px 0px $lgPlanetSize/10 $lgPlanetSize/10 yellow;
+    }
+  }
+  &.warfare {
+    box-shadow: 0px 0px $planetSize/10 $planetSize/10 red;
+    @include md-up {
+      box-shadow: 0px 0px $mdPlanetSize/10 $mdPlanetSize/10 red;
+    }
+    @include lg-up {
+      box-shadow: 0px 0px $lgPlanetSize/10 $lgPlanetSize/10 red;
+    }
+  }
+}
+
+.map {
+  position: relative;
+
+  &.layout-map {
+    .hexagon, .hex-content {
+      cursor: pointer;
+      user-select: none;
+    }
+  }
+
+  &.map-map {
+    .hexagon, .hex-content {
+      user-select: none;
+      cursor: grab;
+
+      &.home, &.rex, &.closed, &.warp, &.open {
+        cursor: default;
+      }
+    }
+  }
+}
+
+.hex-container {
+  position: absolute;
+  height: $hexSize;
+  width: $hexSize;
+  z-index:0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bolder;
+
+  @include md-up {
+    height: $mdHexSize;
+    width: $mdHexSize;
+  }
+  @include lg-up {
+    height: $lgHexSize;
+    width: $lgHexSize;
+  }
+
+  .shape-container {
+    position: absolute;
+    left:0;
+    right:0;
+    width:100%;
+    height:100%;
+    z-index:1;
+
+    .hexagon {
+      z-index: 51;
+    }
+  }
+
+  .hex-content {
+    position:absolute;
+    width: $hexSize*.9;
+    left: $hexSize*.05;
+    height: $hexSize*.866*.8;
+    top: $hexSize*.866*.1;
+    z-index:100;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+      @include md-up {
+        width: $mdHexSize*.9;
+        left: $mdHexSize*.05;
+        height: $mdHexSize*.866*.8;
+        top: $mdHexSize*.866*.1;
+      }
+      @include lg-up {
+        width: $lgHexSize*.9;
+        left: $lgHexSize*.05;
+        height: $lgHexSize*.866*.8;
+        top: $lgHexSize*.866*.1;
+      }
+    .id-alone {
+      font-size: $hexSize/2;
+      @include md-up {
+        font-size: $mdHexSize/2;
+      }
+      @include lg-up {
+        font-size: $lgHexSize/2;
+      }
+    }
+  }
+
+}
+
+
+
+.id {
+  font-size: $planetSize/4;
+  color: #bdbdbd;
+  position: absolute;
+  left: 0; right: 0; margin: auto;
+  bottom: $hexSize*-.075;
+  text-align:center;
+  @include md-up {
+    font-size: $mdPlanetSize/4;
+    bottom: $mdHexSize*-.075;
+  }
+  @include lg-up {
+    font-size: $lgPlanetSize/4;
+    bottom: $lgHexSize*-.075;
+  }
+}
+
+.value {
+  font-size: $planetSize/4;
+  color: #bdbdbd;
+  position: absolute;
+  left: 0; right: 0; margin: auto;
+  top: $hexSize*-.075;
+  text-align:center;
+  @include md-up {
+    font-size: $mdPlanetSize/4;
+    bottom: $mdHexSize*-.075;
+  }
+  @include lg-up {
+    font-size: $lgPlanetSize/4;
+    bottom: $lgHexSize*-.075;
+  }
+}
+
+
+.hexagon {
+  fill: #000264;
+}
+
+.hexagon.open {
+  fill: #9eb2ed;
+}
+
+.hexagon.home {
+  fill: #077907;
+}
+
+.hexagon.closed {
+  fill: black;
+}
+
+.hexagon.warp {
+  fill: black;
+}
+
+.hexagon.warp {
+  fill: none;
+}
+
+.layout-editor {
+  display: flex;
+  flex-direction: column;
+  align-self:center;
+  align-items: center;
+
+  .layout-control-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-bottom: 30px;
+
+  }
+}
+
+.map-editor {
+  display: flex;
+  flex-direction: column;
+  align-self:center;
+  align-items: center;
+
+  .map-control-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-bottom: 0px;
+
+  }
+
+}
+
+.warp-line {
+  z-index:120;
+  cursor: pointer;
+  stroke:rgb(255,255,255);
+  stroke-width:2;
+}
+
+.map-container {
+  display:flex;
+  flex-direction:row;
+  justify-content: center;
+}
+
+.map-controls-column {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+
+  @include md-up{
+    align-items:flex-start;
+    padding-left: 30px;
+  }
+
+  @include lg-up{
+    padding-left:0;
+  }
+
+}
+
+.system-bank {
+
+  .hex-container {
+    position: relative;
+    .hexagon, .hex-content {
+      cursor:grab;
+    }
+
+  }
+}
+
+.is-legal.legal, .is-complete.complete {
+  color: lawngreen;
+}
+.is-legal.illegal, .is-complete.incomplete {
+  color: red;
+}
+
+.footer {
+  font-size:10px;
+  background-color:black;
+  text-align:center;
+}
+
+.evaluator-form {
+  display: flex;
+  flex-direction: column;
+  align-items:center;
+  .form-container {
+    max-width:400px;
+    .line-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      .all-parts {
+        display: flex;
+        flex-direction: row;
+        .both-controls {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          min-width:90px;
+          .input-only {
+            margin-bottom:0;
+            input {
+              width: 50px;
+              text-align: center;
+            }
+          }
+        }
+        .checkbox-holder {
+          font-size: 10px;
+        }
+      }
+      input.is-small {
+        width: 100px;
+      }
+    }
+  }
+
+}
+.info-container {
+  position: relative;
+  cursor: pointer;
+  .input-info {
+    display: none;
+    position: absolute;
+    left:20px;
+    top:0;
+    font-size:10px;
+    line-height:9px;
+    color:black;
+    background-color:white;
+    padding:3px;
+    width:130px;
+  }
+}
+
+
+.info-container:hover .input-info, .info-container:active .input-info {
+  display: block;
+}
+
+.check-container {
+  font-size:10px;
+
+}
