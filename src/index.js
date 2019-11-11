@@ -14,6 +14,7 @@ const SCREENS = {
     "MAP_EDITOR": 1,
     "LAYOUT_EDITOR": 2,
     "SYSTEM_EVALUATOR": 3,
+    "INSTRUCTIONS": 4,
 };
 
 function toggleMenu() {
@@ -68,6 +69,14 @@ class MapLabNavigator extends React.Component {
                     />
                 );
                 break;
+            case SCREENS.INSTRUCTIONS:
+                screen_return = (
+                    <div class="block content">
+                        <h2>Instructions</h2>
+                        <p>Yo.</p>
+                    </div>
+                );
+                break;
             default:
                 break;
         }
@@ -95,6 +104,14 @@ class MapLabNavigator extends React.Component {
                         <div className="navbar-start">
                         </div>
                             <div className="navbar-end">
+                                {/*eslint-disable-next-line*/}
+                                <a role="button"
+                                    disabled={this.state.active_screen===SCREENS.INSTRUCTIONS}
+                                    onClick={()=>this.changeScreen(SCREENS.INSTRUCTIONS)}
+                                    className="navbar-item"
+                                >
+                                    Instructions
+                                </a>
                                 {/*eslint-disable-next-line*/}
                                 <a role="button"
                                     disabled={this.state.active_screen===SCREENS.MAP_EDITOR}
@@ -126,6 +143,7 @@ class MapLabNavigator extends React.Component {
                 <div className="block footer">
                     This is a fan project by J. Arthur Ellis.&nbsp;
                     <a href="https://twitter.com/joepinion">@joepinion</a>
+                    <br /><a href="https://www.github.com/joepinion/ti4-map-lab">github.com/joepinion/ti4-map-lab</a>
                 </div>
             </div>
         );
