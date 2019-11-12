@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/ti4-map-lab/static/css/main.71cf80b5.chunk.css",
-    "main.js": "/ti4-map-lab/static/js/main.0fa71690.chunk.js",
-    "main.js.map": "/ti4-map-lab/static/js/main.0fa71690.chunk.js.map",
+    "main.js": "/ti4-map-lab/static/js/main.f67a2270.chunk.js",
+    "main.js.map": "/ti4-map-lab/static/js/main.f67a2270.chunk.js.map",
     "runtime~main.js": "/ti4-map-lab/static/js/runtime~main.03867a53.js",
     "runtime~main.js.map": "/ti4-map-lab/static/js/runtime~main.03867a53.js.map",
     "static/js/2.351d865c.chunk.js": "/ti4-map-lab/static/js/2.351d865c.chunk.js",
     "static/js/2.351d865c.chunk.js.map": "/ti4-map-lab/static/js/2.351d865c.chunk.js.map",
     "index.html": "/ti4-map-lab/index.html",
-    "precache-manifest.d6953c5615d9e940679a72938075ef1d.js": "/ti4-map-lab/precache-manifest.d6953c5615d9e940679a72938075ef1d.js",
+    "precache-manifest.41af7c8b526a9df368b7c5937fa568cc.js": "/ti4-map-lab/precache-manifest.41af7c8b526a9df368b7c5937fa568cc.js",
     "service-worker.js": "/ti4-map-lab/service-worker.js",
     "static/css/main.71cf80b5.chunk.css.map": "/ti4-map-lab/static/css/main.71cf80b5.chunk.css.map"
   }
