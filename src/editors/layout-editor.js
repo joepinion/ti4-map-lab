@@ -29,6 +29,12 @@ export class LayoutEditor extends BaseEditor {
         this.state.show_warps = false;
         this.state.show_wormholes = false;
         this.state.show_anomalies = false;
+        if(this.props.state_to_import) {
+            let matching_options = this.getOptions().filter(option => option.index === this.props.state_to_import.selected_item);
+            if (matching_options.length > 0) {
+                this.state = this.props.state_to_import;
+            }
+        }
     }
 
     handleSelectChange() {
@@ -201,11 +207,25 @@ export class LayoutEditor extends BaseEditor {
         return eligible_systems[0];
     }
 
-    render() {
-        let options = [(<option value="new" key="new">New Layout</option>)];
+    getOptions() {
+        let options = [{
+            "index": "new",
+            "title": "New Layout",
+        }];
         for(let [index, one_saved] of this.state.saved_data.entries()) {
+            options.push({
+                "index": index.toString(),
+                "title": one_saved.title,
+            });
+        }
+        return options;
+    }
+
+    render() {
+        let options = [];
+        for(let opt of this.getOptions()) {
             options.push(
-                <option value={index} key={index}>{one_saved.title}</option>
+                <option value={opt.index} key={opt.index}>{opt.title}</option>
             );
         }
         let defaults = [];

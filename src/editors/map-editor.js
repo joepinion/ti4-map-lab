@@ -49,6 +49,13 @@ export class MapEditor extends BaseEditor {
             "dont_move_empty": false,
         };
         this.state.long_op = false;
+        if(this.props.state_to_import) {
+            let matching_options = this.getOptions().filter(option => option.index === this.props.state_to_import.selected_item);
+            let matching_evals = this.getEvalOptions().filter(option => option.index === this.props.state_to_import.eval_option);
+            if (matching_options.length > 0 && matching_evals.length > 0) {
+                this.state = this.props.state_to_import;
+            }
+        }
     }
 
     setMap(new_map, home_values=null, balance_difference=null, eval_var=null) {
@@ -263,7 +270,7 @@ export class MapEditor extends BaseEditor {
         this.setState({
             "message": new_message,
             "input_title": loadedTitle,
-            "selected_item": "new_"+index,
+            "selected_item": "newc_"+index,
         });
     }
 
@@ -618,6 +625,48 @@ export class MapEditor extends BaseEditor {
         });
     }
 
+    getEvalOptions() {
+        let options = [];
+        for(let [index, one_default] of default_variables.entries()) {
+            options.push({
+                "index": "default_"+index,
+                "title": one_default.title,
+            })
+        }
+        for(let [index, one_saved] of (ls.get(this.props.eval_storage_key) || [])) {
+            options.push({
+                "index": "custom_"+index.toString(),
+                "title": one_saved.title,
+            });
+        }
+        return options;
+    }
+
+    getOptions() {
+        let options = [];
+        for(let [index, one_default] of this.default_layouts.entries()) {
+            options.push({
+                "index": "new_"+index,
+                "title": "New from default layout "+one_default.title,
+            });
+        }
+        for(let [index, one_custom_l] of (ls.get(this.props.layout_storage_key) || []).entries()) {
+            if(this.getLayoutFromJSON(one_custom_l.data).areWarpsLogical()) {
+                options.push({
+                    "index": "newc_" + index,
+                    "title": "New from custom layout " + one_custom_l.title,
+                });
+            }
+        }
+        for(let [index, one_saved] of this.state.saved_data.entries()) {
+            options.push({
+                "index": index,
+                "title": one_saved.title
+            });
+        }
+        return options;
+    }
+
     render() {
         let is_legal = (<label className="button is-outlined is-small is-danger">Illegal</label>);
         if(this.state.map.isLegal()) is_legal = (<label className="button is-small is-outlined is-success">Legal</label>);
@@ -625,47 +674,16 @@ export class MapEditor extends BaseEditor {
         if(this.state.map.isComplete()) is_complete = (<label className="button is-small is-outlined is-success">Complete</label>);
 
         let options = [];
-        for(let [index, one_default] of this.default_layouts.entries()) {
-            options.push(<option
-                value={"new_"+index}
-                key={"new_"+index}
-            >
-                New from default layout {one_default.title}
-            </option>);
-        }
-        for(let [index, one_custom_l] of (ls.get(this.props.layout_storage_key) || []).entries()) {
-            if(this.getLayoutFromJSON(one_custom_l.data).areWarpsLogical()) {
-                options.push(<option
-                    value={"newc_"+index}
-                    key={"newc_"+index}
-                >
-                    New from custom layout {one_custom_l.title}
-                </option>);
-            }
-        }
-        for(let [index, one_saved] of this.state.saved_data.entries()) {
+        for(let opt of this.getOptions()) {
             options.push(
-                <option value={index} key={index}>{one_saved.title}</option>
+                <option value={opt.index} key={opt.index}>{opt.title}</option>
             );
         }
 
         let eval_options = [];
-        for(let [index, one_default] of default_variables.entries()) {
-            eval_options.push(<option
-                value={"default_"+index}
-                key={"default_"+index}
-            >
-                {one_default.title}
-            </option>
-            );
-        }
-        for(let [index, one_custom] of (ls.get(this.props.eval_storage_key) || []).entries()) {
-            eval_options.push(<option
-                value={"custom_"+index}
-                key={"custom_"+index}
-            >
-                {one_custom.title}
-            </option>
+        for(let opt of this.getEvalOptions()) {
+            eval_options.push(
+                <option value={opt.index} key={opt.index}>{opt.title}</option>
             );
         }
 

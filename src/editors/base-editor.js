@@ -34,6 +34,10 @@ export class BaseEditor extends React.Component {
         };
     }
 
+    componentWillUnmount() {
+        this.props.sendStateBeforeDeath(this.state);
+    }
+
     setMap(new_map) {
         this.setState({"map": new_map});
     }
