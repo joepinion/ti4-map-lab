@@ -5,14 +5,14 @@
   "homepage": "https://joepinion.github.io/ti4-map-lab",
   "dependencies": {
     "bulma": "^0.7.5",
-    "eslint-utils": "^1.4.3",
     "gh-pages": "^2.1.1",
     "jquery": "^3.4.1",
     "local-storage": "^2.0.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.1",
-    "sass": "^1.22.10"
+    "sass": "^1.22.10",
+    "eslint-utils": "1.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
