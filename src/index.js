@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import * as serviceWorker from './serviceWorker';
 
 import "./styles/map-lab.scss";
 import {MapEditor} from "./editors/map-editor";
@@ -240,3 +241,4 @@ ReactDOM.render(
     document.getElementById('root')
 );
 
+serviceWorker.register();
