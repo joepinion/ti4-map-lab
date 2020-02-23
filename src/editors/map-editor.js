@@ -633,7 +633,8 @@ export class MapEditor extends BaseEditor {
                 "title": one_default.title,
             })
         }
-        for(let [index, one_saved] of (ls.get(this.props.eval_storage_key).entries() || [])) {
+        let evals = ls.get(this.props.eval_storage_key) || [];
+        for(let [index, one_saved] of evals.entries() || []) {
             options.push({
                 "index": "custom_"+index.toString(),
                 "title": one_saved.title,
