@@ -229,11 +229,6 @@ class MapLabNavigator extends React.Component {
                     </div>
                 </nav>
                 {screen_return}
-                <div className="block footer">
-                    This is a fan project by J. Arthur Ellis.&nbsp;
-                    <a href="https://twitter.com/joepinion">@joepinion</a>
-                    <br /><a href="https://www.github.com/joepinion/ti4-map-lab">github.com/joepinion/ti4-map-lab</a>
-                </div>
             </div>
         );
     }
