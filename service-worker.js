@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/ti4-map-lab/precache-manifest.45a372105639edccc9edcca64b633248.js"
+  "/ti4-map-lab/precache-manifest.30bf554a7b90224e1f259cfc35ba9866.js"
 );
 
 self.addEventListener('message', (event) => {
