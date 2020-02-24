@@ -175,10 +175,6 @@ export class EvaluationEditor extends BaseEditor {
                 </p>
             )
         }
-        let message = null;
-        if(this.state.message !== null && this.state.message!=="") {
-            message = (<blockquote>{this.state.message}</blockquote>);
-        }
 
         return(
             <div className="block">
@@ -279,9 +275,8 @@ export class EvaluationEditor extends BaseEditor {
                             </div>
                         </div>
                     </div>
-                    <div className="block content for-message">
-                        {message}
-                    </div>
+                    {this.getMessageHtml()}
+
                 </div>
                 <EvaluatorForm
                     values={this.state.values}

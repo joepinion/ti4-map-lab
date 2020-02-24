@@ -28,7 +28,23 @@ h1 {padding:1rem;}
 }
 
 .for-message {
+  font-size:.6rem;
   width:100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height:70px;
+  z-index: 500;
+  .close-button {
+    position: absolute;
+    top:10px;
+    right: 10px;
+    cursor: pointer;
+  }
+  @include md-up {
+    position: static;
+
+  }
 }
 
 .wormhole {

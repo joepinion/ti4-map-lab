@@ -713,11 +713,6 @@ export class MapEditor extends BaseEditor {
             bal_diff = (<p className="control"><label className="label">Balance Gap: {this.state.balance_difference}</label></p>);
         }
 
-        let message = null;
-        if(this.state.message !== null && this.state.message!=="") {
-            message = (<blockquote>{this.state.message}</blockquote>);
-        }
-
 
         return(
             <div className="block">
@@ -868,9 +863,7 @@ export class MapEditor extends BaseEditor {
                 </div>
                 <div className="columns">
                     <div className="column is-one-fifth-desktop is-narrow-tablet map-controls-column">
-                        <div className="block content for-message">
-                            {message}
-                        </div>
+                        {this.getMessageHtml()}
                         <div className="field">
                             <label className="label">Auto-Complete</label>
                             <p className="control">

@@ -105,10 +105,10 @@ class MapLabNavigator extends React.Component {
                             <li>If you don't want the default 6-player map, choose another "new from" option under
                                 "Saved/Defaults"</li>
                             <li>Scroll down and click "Auto-Complete Map."</li>
-                            <li>Click the "Improve Balance" button a few times to make the map more fair according to the.
+                            <li>Click the "Improve Balance" button a few times to make the map more fair according to the
                                 current Evaluator algorithm. The number in each Home System represents the strength of that
                                 home system's position based on the quality of and distance from systems on the map.</li>
-                            <li>Change "Simple Slice" to another evaluator to get a different view on the
+                            <li>Change "Joebrew" to another evaluator to get a different view on the
                                 strength of the home system positions.</li>
                             <li>Drag and drop systems to switch them with each other as you wish (On mobile, click a
                                 system to send it back to the system bank, or click a space to put the currently selected

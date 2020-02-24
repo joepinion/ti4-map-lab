@@ -242,10 +242,6 @@ export class LayoutEditor extends BaseEditor {
                 </p>
             )
         }
-        let message = null;
-        if(this.state.message !== null && this.state.message!=="") {
-            message = (<blockquote>{this.state.message}</blockquote>);
-        }
 
         return(
             <div className="block">
@@ -348,9 +344,7 @@ export class LayoutEditor extends BaseEditor {
                     </div>
                     <div className="columns">
                         <div className="column is-one-fifth-desktop is-narrow-tablet map-controls-column">
-                            <div className="block content for-message">
-                                {message}
-                            </div>
+                            {this.getMessageHtml()}
                             <div className="field">
                                 <label className="label">Click Cycle</label>
                                 <p className="control">

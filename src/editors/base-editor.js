@@ -34,6 +34,28 @@ export class BaseEditor extends React.Component {
         };
     }
 
+    getMessageHtml() {
+        let message = null;
+        if(this.state.message !== null && this.state.message!=="") {
+            message = (
+                <div className="block content for-message">
+                      <blockquote>{this.state.message}</blockquote>
+                    <div
+                        className="close-button"
+                        onClick={()=>this.setNoMessage()}
+                    >
+                        <i className="fa fa-window-close fa-2x"></i>
+                    </div>
+                </div>
+            );
+        }
+        return message;
+    }
+
+    setNoMessage() {
+        this.setState({"message": null});
+    }
+
     componentWillUnmount() {
         this.props.sendStateBeforeDeath(this.state);
     }
