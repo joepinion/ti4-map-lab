@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/ti4-map-lab/static/css/main.71cf80b5.chunk.css",
-    "main.js": "/ti4-map-lab/static/js/main.de3082d5.chunk.js",
-    "main.js.map": "/ti4-map-lab/static/js/main.de3082d5.chunk.js.map",
+    "main.css": "/ti4-map-lab/static/css/main.4c85020b.chunk.css",
+    "main.js": "/ti4-map-lab/static/js/main.e060e2fa.chunk.js",
+    "main.js.map": "/ti4-map-lab/static/js/main.e060e2fa.chunk.js.map",
     "runtime~main.js": "/ti4-map-lab/static/js/runtime~main.03867a53.js",
     "runtime~main.js.map": "/ti4-map-lab/static/js/runtime~main.03867a53.js.map",
     "static/js/2.351d865c.chunk.js": "/ti4-map-lab/static/js/2.351d865c.chunk.js",
     "static/js/2.351d865c.chunk.js.map": "/ti4-map-lab/static/js/2.351d865c.chunk.js.map",
     "index.html": "/ti4-map-lab/index.html",
-    "precache-manifest.c280609ce18e86f219da807f0b7a3809.js": "/ti4-map-lab/precache-manifest.c280609ce18e86f219da807f0b7a3809.js",
+    "precache-manifest.0df42821b6d6d3ea1247b3986aaffd04.js": "/ti4-map-lab/precache-manifest.0df42821b6d6d3ea1247b3986aaffd04.js",
     "service-worker.js": "/ti4-map-lab/service-worker.js",
-    "static/css/main.71cf80b5.chunk.css.map": "/ti4-map-lab/static/css/main.71cf80b5.chunk.css.map"
+    "static/css/main.4c85020b.chunk.css.map": "/ti4-map-lab/static/css/main.4c85020b.chunk.css.map"
   }
 }
