@@ -146,7 +146,7 @@ export let planet_data = [
     },
     {
         "name": "Lodor",
-        "trait": PLANET_TRAITS.INDUSTRIAL,
+        "trait": PLANET_TRAITS.CULTURAL,
         "tech_specialty": null,
         "resources": 3,
         "influence": 1,
@@ -256,6 +256,203 @@ export let planet_data = [
         "resources": 1,
         "influence": 2,
     },
+    {
+    "name": "Archon Vail",
+        "trait": PLANET_TRAITS.HAZARDOUS,
+        "tech_specialty": TECH_SPECIALTIES.PROPULSION,
+        "resources": 1,
+        "influence": 3,    
+    },
+ {
+    "name": "Perimeter",
+        "trait": PLANET_TRAITS.INDUSTRIAL,
+        "tech_specialty": null,
+        "resources": 2,
+        "influence": 1,    
+    },
+    {
+    "name": "Ang",
+        "trait": PLANET_TRAITS.INDUSTRIAL,
+        "tech_specialty": TECH_SPECIALTIES.WARFARE,
+        "resources": 2,
+        "influence": 0,    
+    },
+    {
+    "name": "Sem-Lore",
+        "trait": PLANET_TRAITS.CULTURAL,
+        "tech_specialty": TECH_SPECIALTIES.CYBERNETIC,
+        "resources": 3,
+        "influence": 2,    
+    },
+    {
+    "name": "Vorhal",
+        "trait": PLANET_TRAITS.CULTURAL,
+        "tech_specialty": TECH_SPECIALTIES.BIOTIC,
+        "resources": 0,
+        "influence": 2,    
+    },
+    {
+    "name": "Atlas",
+        "trait": PLANET_TRAITS.HAZARDOUS,
+        "tech_specialty": null,
+        "resources": 3,
+        "influence": 1,    
+    },
+    {
+    "name": "Primor",
+        "trait": PLANET_TRAITS.CULTURAL,
+        "tech_specialty": null,
+        "resources": 2,
+        "influence": 1,    
+    },
+    {
+    "name": "Hope's End",
+        "trait": PLANET_TRAITS.HAZARDOUS,
+        "tech_specialty": null,
+        "resources": 3,
+        "influence": 0,    
+    },
+    {
+    "name": "Cormund",
+        "trait": PLANET_TRAITS.HAZARDOUS,
+        "tech_specialty": null,
+        "resources": 2,
+        "influence": 0,    
+    },
+    {
+    "name": "Everra",
+        "trait": PLANET_TRAITS.CULTURAL,
+        "tech_specialty": null,
+        "resources": 3,
+        "influence": 1,    
+    },
+    {
+    "name": "Accoen",
+        "trait": PLANET_TRAITS.INDUSTRIAL,
+        "tech_specialty": null,
+        "resources": 2,
+        "influence": 3,    
+    },
+    {
+    "name": "Jeol Ir",
+        "trait": PLANET_TRAITS.INDUSTRIAL,
+        "tech_specialty": null,
+        "resources": 2,
+        "influence": 3,    
+    },
+    {
+    "name": "Kraag",
+        "trait": PLANET_TRAITS.HAZARDOUS,
+        "tech_specialty": null,
+        "resources": 2,
+        "influence": 1,    
+    },
+    {
+    "name": "Siig",
+        "trait": PLANET_TRAITS.HAZARDOUS,
+        "tech_specialty": null,
+        "resources": 0,
+        "influence": 2,    
+    },
+    {
+    "name": "Alio Prima",
+        "trait": PLANET_TRAITS.CULTURAL,
+        "tech_specialty": null,
+        "resources": 1,
+        "influence": 1,    
+    },
+    {
+    "name": "Ba'kal",
+        "trait": PLANET_TRAITS.INDUSTRIAL,
+        "tech_specialty": null,
+        "resources": 3,
+        "influence": 2,    
+    },
+    {
+    "name": "Lisis",
+        "trait": PLANET_TRAITS.INDUSTRIAL,
+        "tech_specialty": null,
+        "resources": 2,
+        "influence": 2,    
+    },
+    {
+    "name": "Velnor",
+        "trait": PLANET_TRAITS.INDUSTRIAL,
+        "tech_specialty": TECH_SPECIALTIES.WARFARE,
+        "resources": 2,
+        "influence": 1,    
+    },
+    {
+    "name": "Cealdri",
+        "trait": PLANET_TRAITS.CULTURAL,
+        "tech_specialty": TECH_SPECIALTIES.CYBERNETIC,
+        "resources": 0,
+        "influence": 2,    
+    },
+    {
+    "name": "Xanhact",
+        "trait": PLANET_TRAITS.HAZARDOUS,
+        "tech_specialty": null,
+        "resources": 0,
+        "influence": 1,    
+    },
+    {
+    "name": "Vega Major",
+        "trait": PLANET_TRAITS.CULTURAL,
+        "tech_specialty": null,
+        "resources": 2,
+        "influence": 1,    
+    },
+    {
+    "name": "Vega Minor",
+        "trait": PLANET_TRAITS.CULTURAL,
+        "tech_specialty": TECH_SPECIALTIES.PROPULSION,
+        "resources": 1,
+        "influence": 2,    
+    },
+    {
+    "name": "Abaddon",
+        "trait": PLANET_TRAITS.CULTURAL,
+        "tech_specialty": null,
+        "resources": 1,
+        "influence": 0,    
+    },
+    {
+    "name": "Ashtroth",
+        "trait": PLANET_TRAITS.HAZARDOUS,
+        "tech_specialty": null,
+        "resources": 2,
+        "influence": 0,    
+    },
+    {
+    "name": "Loki",
+        "trait": PLANET_TRAITS.CULTURAL,
+        "tech_specialty": null,
+        "resources": 1,
+        "influence": 2,    
+    },
+    {
+    "name": "Rigel I",
+        "trait": PLANET_TRAITS.HAZARDOUS,
+        "tech_specialty": null,
+        "resources": 0,
+        "influence": 1,    
+    },
+    {
+    "name": "Rigel II",
+        "trait": PLANET_TRAITS.INDUSTRIAL,
+        "tech_specialty": null,
+        "resources": 1,
+        "influence": 2,    
+    },
+    {
+    "name": "Rigel III",
+        "trait": PLANET_TRAITS.INDUSTRIAL,
+        "tech_specialty": TECH_SPECIALTIES.BIOTIC,
+        "resources": 1,
+        "influence": 1,    
+    },
+        
 
 ];
 
@@ -458,5 +655,139 @@ export let system_data = [
         "anomaly": null,
         "wormhole": WORMHOLES.BETA
     },
+    {
+        "id": 59,
+        "planets": ["Archon Vail"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 60,
+        "planets": ["Perimeter"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 61,
+        "planets": ["Ang"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 62,
+        "planets": ["Sem-Lore"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 63,
+        "planets": ["Vorhal"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 64,
+        "planets": ["Atlas"],
+        "anomaly": null,
+        "wormhole": WORMHOLES.BETA
+    },
+    {
+        "id": 65,
+        "planets": ["Primor"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 66,
+        "planets": ["Hope's End"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 67,
+        "planets": ["Cormund"],
+        "anomaly": ANOMALIES.GRAVITY_RIFT,
+        "wormhole": null
+    },
+    {
+        "id": 68,
+        "planets": ["Everra"],
+        "anomaly": ANOMALIES.NEBULA,
+        "wormhole": null
+    },
+    {
+        "id": 69,
+        "planets": ["Accoen", "Joel Ir"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 70,
+        "planets": ["Kraag", "Siig"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 71,
+        "planets": ["Alio Prima", "Ba'kal"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 72,
+        "planets": ["Lisis", "Velnor"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 73,
+        "planets": ["Cealdri", "Xanhact"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 74,
+        "planets": ["Vega Major", "Vega Minor"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 75,
+        "planets": ["Abaddon", "Ashtroth", "Loki"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 76,
+        "planets": ["Rigel I", "Rigel II", "Rigel III"],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 77,
+        "planets": [],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 78,
+        "planets": [],
+        "anomaly": null,
+        "wormhole": null
+    },
+    {
+        "id": 79,
+        "planets": [""],
+        "anomaly": ANOMALIES.ASTEROID_FIELD,
+        "wormhole": WORMHOLES.ALPHA
+    },
+    {
+        "id": 80,
+        "planets": [""],
+        "anomaly": ANOMALIES.SUPERNOVA,
+        "wormhole": null
+    },
+    
+    
 ];
 
