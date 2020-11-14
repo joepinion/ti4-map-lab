@@ -37,7 +37,7 @@ export class MapEditor extends BaseEditor {
         this.state.option_pair_wormholes = true;
         this.state.option_include_all_wormholes = true;
         this.state.target_blue_total = "random";
-        this.state.bank_systems = this.syncBankSystems(starting_layout);
+        this.state.bank_systems = this.syncBankSystems(starting_layout, true);
         this.state.eval_option="default_0";
         this.state.eval_variables=default_variables[0];
         this.state.home_values = {};
@@ -48,6 +48,7 @@ export class MapEditor extends BaseEditor {
             "dont_move_anomalies": false,
             "dont_move_empty": false,
         };
+        this.state.include_expansion_systems = true;
         this.state.long_op = false;
         if(this.props.state_to_import) {
             let matching_options = this.getOptions().filter(option => option.index === this.props.state_to_import.selected_item);
@@ -80,10 +81,20 @@ export class MapEditor extends BaseEditor {
         });
     }
 
-    syncBankSystems(map) {
+    syncBankSystems(map, include_expansion_systems=null) {
+        if(include_expansion_systems===null) include_expansion_systems = this.state.include_expansion_systems;
         let bank_systems = new SystemBox([], []);
         for(let system of this.system_box.systems) {
-            if(map===null || !map.containsSystem(system.id)) {
+            if(
+                (
+                    map===null
+                    || !map.containsSystem(system.id)
+                )
+                && (
+                    system.id<59
+                    || include_expansion_systems
+                )
+            ) {
                  bank_systems.systems.push(system);
              }
         }
@@ -668,6 +679,13 @@ export class MapEditor extends BaseEditor {
         return options;
     }
 
+    toggleExpansion() {
+        this.setState({
+            include_expansion_systems: !this.state.include_expansion_systems,
+            bank_systems: this.syncBankSystems(this.state.map, !this.state.include_expansion_systems),
+        });
+    }
+
     render() {
         let is_legal = (<label className="button is-outlined is-small is-danger">Illegal</label>);
         if(this.state.map.isLegal()) is_legal = (<label className="button is-small is-outlined is-success">Legal</label>);
@@ -960,6 +978,8 @@ export class MapEditor extends BaseEditor {
                         </div>
                         <SystemBankComponent
                             systems={this.state.bank_systems}
+                            include_expansion_systems={this.state.include_expansion_systems}
+                            toggleExpansion={()=>this.toggleExpansion()}
                             active_system={this.state.selected_bank_system}
                             setActiveSystem={(system)=>this.setActiveBankSystem(system)}
                             system_format={this.state.system_format}

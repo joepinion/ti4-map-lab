@@ -21,6 +21,7 @@ export const EVAL_ASPECTS = {
     "MATCHING_PLANETS_MOD": "MATCHING_PLANETS_MOD",
     "NONMATCHING_PLANETS_MOD": "NONMATCHING_PLANETS_MOD",
     "MECATOL_REX_SYS_MOD": "MECATOL_REX_SYS_MOD",
+    "LEGENDARY_PLANET_SYS_MOD": "LEGENDARY_PLANET_SYS_MOD",
     "DISTANCE_MOD_BASE": "DISTANCE_MOD_BASE",
     "DISTANCE_MOD_PLANET": "DISTANCE_MOD_PLANET",
     "DISTANCE_MOD_EMPTY": "DISTANCE_MOD_EMPTY",
@@ -281,6 +282,13 @@ export class EvaluatorForm extends React.Component {
                         num_value={this.props.values.MECATOL_REX_SYS_MOD}
                         onInputChange={value => this.reportChange(EVAL_ASPECTS.MECATOL_REX_SYS_MOD, value)}
                         helperText="Number to add if the system contains Mecatol Rex."
+                    />
+                    <EvaluatorLine
+                        m="+"
+                        label="Legendary Planet System"
+                        num_value={this.props.values.LEGENDARY_PLANET_SYS_MOD}
+                        onInputChange={value => this.reportChange(EVAL_ASPECTS.LEGENDARY_PLANET_SYS_MOD, value)}
+                        helperText="Number to add if the system contains a Legendary Planet."
                     />
                     <h3>Home to System Distance Evaluation</h3>
                     <h4>Distance Measurement</h4>

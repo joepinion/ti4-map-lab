@@ -126,6 +126,10 @@ export class System {
         if(this.isMecatolRexSystem()) {
             value+=v.MECATOL_REX_SYS_MOD;
         }
+        if(this.id === 65 || this.id === 66) {
+            let legendary_mod = v.LEGENDARY_PLANET_SYS_MOD || 0;
+            value+=legendary_mod;
+        }
         return value;
     }
 

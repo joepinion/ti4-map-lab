@@ -32,6 +32,10 @@ export class SystemBankComponent extends React.Component {
         }
     }
 
+    handleExpansionCheckboxChange(e) {
+        this.props.toggleExpansion();
+    }
+
     selectNoSystems() {
         this.props.setActiveSystem(null);
     }
@@ -75,6 +79,15 @@ export class SystemBankComponent extends React.Component {
                     <label className="label">
                         System Bank
                     </label>
+                    <p className="control">
+                        <input
+                            id="include-expansion-systems"
+                            type="checkbox"
+                            checked={this.props.include_expansion_systems}
+                            onChange={(e)=>this.handleExpansionCheckboxChange(e)}
+                        />
+                        <label htmlFor="include-expansion-systems"> Expansion Systems</label>
+                    </p>
                     <p className="control">
                         <span className="select is-small">
                             <select
