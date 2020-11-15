@@ -334,7 +334,7 @@ export let planet_data = [
         "influence": 3,
     },
     {
-        "name": "Jeol Ir",
+        "name": "Joel Ir",
         "trait": PLANET_TRAITS.INDUSTRIAL,
         "tech_specialty": null,
         "resources": 2,

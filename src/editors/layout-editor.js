@@ -47,6 +47,10 @@ export class LayoutEditor extends BaseEditor {
         }
     }
 
+    syncBankSystems(what) {
+        
+    }
+
     isSelectNew(selected_item=null) {
         if(selected_item !== null) return selected_item==="new";
         return this.getSelectValue() === "new";
