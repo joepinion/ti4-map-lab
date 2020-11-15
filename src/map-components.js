@@ -142,8 +142,14 @@ export class MapComponent extends React.Component {
 
     render() {
         let hexSize = this.state.hexSize;
-        let mapHeight = hexSize*.866*7 + hexSpace*6;
-        let mapWidth = hexSize*5.5 + hexSpace*6;
+        let cw = 5.5;
+        let ch = 7;
+        if(this.props.map.spaces.length>37) {
+            cw = 7;
+            ch = 9;
+        }
+        let mapHeight = hexSize*.866*ch + hexSpace*6;
+        let mapWidth = hexSize*cw + hexSpace*6;
         let mapCenterH = mapWidth/2;
         let mapCenterV = mapHeight/2;
         let display=[];
