@@ -294,7 +294,9 @@ export class MapEditor extends BaseEditor {
     getMapString(map = this.state.map) {
         let final_string = "";
         let is_first = "";
-        for(let one_coor of map_string_order) {
+        let coord_order = map_string_order.slice();
+        if(map.spaces.length<=37) coord_order.splice(36, 24);
+        for(let one_coor of coord_order) {
             let one_space = getObjFromCoord(one_coor, map.spaces);
             if(one_space && one_space.type===MAP_SPACE_TYPES.SYSTEM && one_space.system) {
                 final_string+=is_first+one_space.system.id;
@@ -310,6 +312,8 @@ export class MapEditor extends BaseEditor {
         let new_map = this.state.map.makeCopy();
         let new_bank = this.state.bank_systems;
         let id_list = map_string.split(" ");
+        let coord_list = map_string_order.slice();
+        if(id_list.length<=37) coord_list.splice(36, 24);
         for(let [index, one_id_string] of id_list.entries()) {
             let one_id = parseInt(one_id_string);
             if(one_id!==0) {
@@ -325,7 +329,7 @@ export class MapEditor extends BaseEditor {
                     one_system_space.system = null;
                     new_bank = this.syncBankSystems(new_map);
                 }
-                let new_space = getObjFromCoord(map_string_order[index], new_map.spaces);
+                let new_space = getObjFromCoord(coord_list[index], new_map.spaces);
                 if(!new_space) {
                     this.setState({"message":"Invalid: Too many systems listed."});
                     return;
