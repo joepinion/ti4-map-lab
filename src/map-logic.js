@@ -184,7 +184,7 @@ export class System {
     }
 
     isRed() {
-        if(this.planets.length<1) return true;
+        if(this.planets.length<1 || this.anomaly !== null) return true;
         return false;
     }
 
