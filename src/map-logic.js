@@ -671,24 +671,11 @@ export class Map {
 
     getAdjacentSpaces(space) {
         let adj_coords = space.getAdjacentCoordinates();
-        let adj_systems = [];
-        for(let one_coord of adj_coords) {
-            let potential_space = getObjFromCoord(one_coord, this.spaces);
-            if(potential_space !== null) {
-                if(potential_space.type!==MAP_SPACE_TYPES.WARP){
-                    if(!areCoordsInList(potential_space, adj_systems)) {
-                        adj_systems.push(potential_space);
-                    }
-                } else {
-                    let potential_systems = this._getAdjacentSpacesThroughWarps(space, potential_space);
-                    for(let one_system_space of potential_systems) {
-                        if(!areCoordsInList(one_system_space, adj_systems)) {
-                            adj_systems.push(one_system_space);
-                        }
-                    }
-                }
-            }
-        }
+        let adj_systems = this.spaces.filter(one_space=>
+			one_space.type!==MAP_SPACE_TYPES.WARP
+			&& areCoordsInList(one_space, adj_coords)
+		);
+		
         return adj_systems;
     }
 
@@ -715,41 +702,24 @@ export class Map {
     }
 
     getMatchingWormholeSpaces(space) {
-        let matching_spaces = [];
         if(space.type===MAP_SPACE_TYPES.SYSTEM && space.system.wormhole!==null) {
-            for(let one_space of this.spaces) {
-                if(
-                    one_space.type===MAP_SPACE_TYPES.SYSTEM &&
-                    one_space.system.wormhole===space.system.wormhole &&
-                    one_space.system.id !== space.system.id
-                ) {
-                    matching_spaces.push(one_space);
-                }
-            }
-        }
-        return matching_spaces;
-    }
+			return this.spaces.filter(one_space =>
+                one_space.type===MAP_SPACE_TYPES.SYSTEM &&
+                one_space.system.wormhole===space.system.wormhole &&
+                one_space.system.id !== space.system.id
+			);
+		}
+		return [];
+	}
 
 }
 
 export function getObjFromCoord(coords, list) {
-        for(let existing_coords of list) {
-        if(
-            coords.x === existing_coords.x &&
-            coords.y === existing_coords.y &&
-            coords.z === existing_coords.z
-        ) {
-            return existing_coords;
-        }
-    }
-    return null;
+	return list.find(oc => oc.x===coords.x && oc.y===coords.y && oc.z===coords.z) || null;
 }
 
 export function areCoordsInList(coords, list) {
-    if(getObjFromCoord(coords, list)) {
-        return true;
-    }
-    return false;
+	return list.some(oc => oc.x===coords.x && oc.y===coords.y && oc.z===coords.z);
 }
 
 export class MapSpace {
@@ -763,16 +733,13 @@ export class MapSpace {
     }
 
     getAdjacentCoordinates() {
-        let x = this.x;
-        let y = this.y;
-        let z = this.z;
         return [
-            {"x":x+1,"y":y-1,"z":z},
-            {"x":x+1,"y":y,"z":z-1},
-            {"x":x-1,"y":y+1,"z":z},
-            {"x":x,"y":y+1,"z":z-1},
-            {"x":x-1,"y":y,"z":z+1},
-            {"x":x,"y":y-1,"z":z+1},
+            {"x":this.x+1,"y":this.y-1,"z":this.z},
+            {"x":this.x+1,"y":this.y,"z":this.z-1},
+            {"x":this.x-1,"y":this.y+1,"z":this.z},
+            {"x":this.x,"y":this.y+1,"z":this.z-1},
+            {"x":this.x-1,"y":this.y,"z":this.z+1},
+            {"x":this.x,"y":this.y-1,"z":this.z+1},
         ];
     }
 
