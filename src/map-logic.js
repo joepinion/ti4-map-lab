@@ -115,23 +115,30 @@ export class System {
         }
         if(this.planets.length===1) {
             value+=v.SINGLE_PLANET_MOD;
-        } else if(this.planets.length>1) {
+        } else if(this.planets.length===2) {
             value+=v.MULTI_PLANET_MOD;
             if(this.planets[0].trait === this.planets[1].trait) {
                 value+=v.MATCHING_PLANETS_MOD;
             } else {
                 value+=v.NONMATCHING_PLANETS_MOD;
             }
+        } else if(this.planets.length>2) {
+            value+=2*v.MULTI_PLANET_MOD;
+            value+=v.MATCHING_PLANETS_MOD;
         }
         if(this.isMecatolRexSystem()) {
             value+=v.MECATOL_REX_SYS_MOD;
         }
-        if(this.id === 65 || this.id === 66) {
+        if(this.isLegendary()) {
             let legendary_mod = v.LEGENDARY_PLANET_SYS_MOD || 0;
             value+=legendary_mod;
         }
         return value;
     }
+	
+	isLegendary() {
+		return this.id === 65 || this.id === 66;
+	}
 
     getDistanceModifier(variables = {}) {
         let v = variables.data;
@@ -151,27 +158,26 @@ export class System {
                 if(v.DISTANCE_MOD_EMPTY===false) return false;
                 value+=v.DISTANCE_MOD_EMPTY;
             }
-        } else {
-            switch(this.anomaly) {
-                case ANOMALIES.ASTEROID_FIELD:
-                    if(v.DISTANCE_MOD_ASTEROID_FIELD===false) return false;
-                    value+=v.DISTANCE_MOD_ASTEROID_FIELD;
-                    break;
-                case ANOMALIES.GRAVITY_RIFT:
-                    if(v.DISTANCE_MOD_GRAVITY_RIFT===false) return false;
-                    value+=v.DISTANCE_MOD_GRAVITY_RIFT;
-                    break;
-                case ANOMALIES.NEBULA:
-                    if(v.DISTANCE_MOD_NEBULA===false) return false;
-                    value+=v.DISTANCE_MOD_NEBULA;
-                    break;
-                case ANOMALIES.SUPERNOVA:
-                    if(v.DISTANCE_MOD_SUPERNOVA===false) return false;
-                    value+=v.DISTANCE_MOD_SUPERNOVA;
-                    break;
-                default:
-                    return false;
-            }
+        }
+        switch(this.anomaly) {
+            case ANOMALIES.ASTEROID_FIELD:
+                if(v.DISTANCE_MOD_ASTEROID_FIELD===false) return false;
+                value+=v.DISTANCE_MOD_ASTEROID_FIELD;
+                break;
+            case ANOMALIES.GRAVITY_RIFT:
+                if(v.DISTANCE_MOD_GRAVITY_RIFT===false) return false;
+                value+=v.DISTANCE_MOD_GRAVITY_RIFT;
+                break;
+            case ANOMALIES.NEBULA:
+                if(v.DISTANCE_MOD_NEBULA===false) return false;
+                value+=v.DISTANCE_MOD_NEBULA;
+                break;
+            case ANOMALIES.SUPERNOVA:
+                if(v.DISTANCE_MOD_SUPERNOVA===false) return false;
+                value+=v.DISTANCE_MOD_SUPERNOVA;
+                break;
+            default:
+                break;
         }
         return value;
     }
@@ -189,14 +195,33 @@ export class System {
     }
 
     isBlue() {
-        return !this.isRed();
+        return !this.isRed() && !this.isMecatolRexSystem();
     }
 
     getStringName() {
         let system = this;
         let name_array = [];
         for(let planet of system.planets) {
-            name_array.push(planet.name+" ("+planet.resources+"/"+planet.influence+")");
+			let tech = "";
+			switch(planet.tech_specialty) {
+			case TECH_SPECIALTIES.BIOTIC:
+				tech = "/G";
+				break;
+			case TECH_SPECIALTIES.WARFARE:
+				tech = "/R";
+				break;
+			case TECH_SPECIALTIES.CYBERNETIC:
+				tech = "/Y";
+				break;
+			case TECH_SPECIALTIES.PROPULSION:
+				tech = "/B";
+				break;
+			default:
+				break;
+			}
+            name_array.push(
+				planet.name+" ("+planet.resources+"/"+planet.influence+tech+")"
+			);
         }
         if(system.wormhole !== null) {
             switch(system.wormhole) {
@@ -381,6 +406,81 @@ export class Map {
         }
         return total;
     }
+	
+	getTotalResources() {
+		let total = 0;
+		for(let space of this.spaces) {
+			if(space.type===MAP_SPACE_TYPES.SYSTEM) {
+				for(let planet of space.system.planets) {
+					total += planet.resources;
+				}
+			}
+		}
+		return total;
+	}
+	getTotalInfluence() {
+		let total = 0;
+		for(let space of this.spaces) {
+			if(space.type===MAP_SPACE_TYPES.SYSTEM) {
+				for(let planet of space.system.planets) {
+					total += planet.influence;
+				}
+			}
+		}
+		return total;
+	}
+	getTotalTechSpecialties() {
+		let total = "";
+		for(let space of this.spaces) {
+			if(space.type===MAP_SPACE_TYPES.SYSTEM) {
+				for(let planet of space.system.planets) {
+					switch(planet.tech_specialty) {
+		                case TECH_SPECIALTIES.WARFARE:
+		                    total += "R";
+		                    break;
+		                case TECH_SPECIALTIES.PROPULSION:
+		                    total += "B";
+		                    break;
+		                case TECH_SPECIALTIES.BIOTIC:
+		                    total += "G";
+		                    break;
+		                case TECH_SPECIALTIES.CYBERNETIC:
+		                    total += "Y";
+		                    break;
+						default:
+							break;
+					}
+				}
+			}
+		}
+		return total.split('').sort().join('');
+	}
+	
+	getPlanetTraitTotals() {
+		let ind = 0;
+		let cul = 0;
+		let haz = 0;
+		for(let space of this.spaces) {
+			if(space.type===MAP_SPACE_TYPES.SYSTEM) {
+				for(let planet of space.system.planets) {
+					switch(planet.trait) {
+					case PLANET_TRAITS.HAZARDOUS:
+						haz++;
+						break;
+					case PLANET_TRAITS.CULTURAL:
+						cul++;
+						break;
+					case PLANET_TRAITS.INDUSTRIAL:
+						ind++;
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		}
+		return haz+"/"+ind+"/"+cul;
+	}
 
     getPossibleSystemTotal() {
         let total = 0;
@@ -449,6 +549,10 @@ export class Map {
         }
         return true;
     }
+	
+	getTotalOpen() {
+		return this.spaces.filter(space=>space.type===MAP_SPACE_TYPES.OPEN).length
+	}
 
     isLegal() {
         let is_legal = true;
@@ -480,7 +584,8 @@ export class Map {
         for(let one_space of this.spaces) {
             if(
                 one_space.type===MAP_SPACE_TYPES.SYSTEM &&
-                one_space.system.evaluate(variables) > 0
+                one_space.system.evaluate(variables) > 0 &&
+				getCoordsDistance(space, one_space) < 5
             ) {
                 spaces_to_get_to.push(one_space);
             }
@@ -548,8 +653,7 @@ export class Map {
         let next_steps = this.getAdjacentSystemsIncludingWormholes(last_step);
         for(let one_step of next_steps) {
             if(one_step.system.id===dest_space.system.id) {
-                let path_copy = [...path];
-                path_copy.push(one_step.system.id);
+                let path_copy = [...path, one_step.system.id];
                 completed_paths.push(path_copy);
             } else if (
                 !(one_step.system.id in path)
@@ -557,8 +661,7 @@ export class Map {
                 && this.getMapDistanceModifier(start_space, dest_space, variables)!==false
                 && path.length<4
             ) {
-                let path_copy = [...path];
-                path_copy.push(one_step.system.id);
+                let path_copy = [...path, one_step.system.id];
                 ongoing_paths.push(path_copy);
             }
         }
@@ -745,6 +848,14 @@ export function getObjFromCoord(coords, list) {
     return null;
 }
 
+export function getCoordsDistance(coords1, coords2) {
+	return Math.max(
+		Math.abs(coords1.x-coords2.x),
+		Math.abs(coords1.y-coords2.y),
+		Math.abs(coords1.z-coords2.z),
+	)
+}
+
 export function areCoordsInList(coords, list) {
     if(getObjFromCoord(coords, list)) {
         return true;
@@ -763,17 +874,14 @@ export class MapSpace {
     }
 
     getAdjacentCoordinates() {
-        let x = this.x;
-        let y = this.y;
-        let z = this.z;
         return [
-            {"x":x+1,"y":y-1,"z":z},
-            {"x":x+1,"y":y,"z":z-1},
-            {"x":x-1,"y":y+1,"z":z},
-            {"x":x,"y":y+1,"z":z-1},
-            {"x":x-1,"y":y,"z":z+1},
-            {"x":x,"y":y-1,"z":z+1},
-        ];
+            {"x":this.x+1,"y":this.y-1,"z":this.z},
+            {"x":this.x+1,"y":this.y,"z":this.z-1},
+            {"x":this.x-1,"y":this.y+1,"z":this.z},
+            {"x":this.x,"y":this.y+1,"z":this.z-1},
+            {"x":this.x-1,"y":this.y,"z":this.z+1},
+            {"x":this.x,"y":this.y-1,"z":this.z+1},
+        ];        
     }
 
     getWarpDirectionCoordinates(warp_direction) {

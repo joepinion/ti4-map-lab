@@ -37,7 +37,7 @@ export class MapEditor extends BaseEditor {
         this.state.option_pair_wormholes = true;
         this.state.option_include_all_wormholes = true;
         this.state.target_blue_total = "random";
-        this.state.bank_systems = this.syncBankSystems(starting_layout, true);
+        this.state.bank_systems = this.syncBankSystems(starting_layout, true, true);
         this.state.eval_option="default_0";
         this.state.eval_variables=default_variables[0];
         this.state.home_values = {};
@@ -49,6 +49,7 @@ export class MapEditor extends BaseEditor {
             "dont_move_empty": false,
         };
         this.state.include_expansion_systems = true;
+		this.state.include_base_systems = true;
         this.state.long_op = false;
         if(this.props.state_to_import) {
             let matching_options = this.getOptions().filter(option => option.index === this.props.state_to_import.selected_item);
@@ -81,8 +82,9 @@ export class MapEditor extends BaseEditor {
         });
     }
 
-    syncBankSystems(map, include_expansion_systems=null) {
+    syncBankSystems(map, include_expansion_systems=null, include_base_systems=null) {
         if(include_expansion_systems===null) include_expansion_systems = this.state.include_expansion_systems;
+		if(include_base_systems===null) include_base_systems = this.state.include_base_systems;
         let bank_systems = new SystemBox([], []);
         for(let system of this.system_box.systems) {
             if(
@@ -93,6 +95,10 @@ export class MapEditor extends BaseEditor {
                 && (
                     system.id<59
                     || include_expansion_systems
+                )
+                && (
+                    system.id>59
+                    || include_base_systems
                 )
             ) {
                  bank_systems.systems.push(system);
@@ -167,7 +173,7 @@ export class MapEditor extends BaseEditor {
         return this.getSelectNewMapValue(selected_item)!==null;
     }
 
-        handleFormatDisplayChange() {
+    handleFormatDisplayChange() {
         let int_select = document.getElementById("select-system-display");
         this.setState({"system_format": parseInt(int_select.options[int_select.selectedIndex].value)});
     }
@@ -608,7 +614,12 @@ export class MapEditor extends BaseEditor {
             let new_diff = null;
             for(let a=0; a<eligible_system_spaces.length; a++) {
                 for(let b=0; b<eligible_system_spaces.length; b++) {
-                    if(a!==b) {
+                    if(
+						a!==b 
+						&&
+						this.state.map.spaces[eligible_system_spaces[a]].system.evaluate(this.state.eval_variables)
+						!== this.state.map.spaces[eligible_system_spaces[b]].system.evaluate(this.state.eval_variables)
+					) {
                         new_map = this.state.map.makeCopy();
                         let replaced_system = new_map.spaces[eligible_system_spaces[b]].system;
                         new_map.spaces[eligible_system_spaces[b]].system = new_map.spaces[eligible_system_spaces[a]].system;
@@ -686,7 +697,14 @@ export class MapEditor extends BaseEditor {
     toggleExpansion() {
         this.setState({
             include_expansion_systems: !this.state.include_expansion_systems,
-            bank_systems: this.syncBankSystems(this.state.map, !this.state.include_expansion_systems),
+            bank_systems: this.syncBankSystems(this.state.map, !this.state.include_expansion_systems, this.state.include_base_systems),
+        });
+    }
+	
+    toggleBaseSystems() {
+        this.setState({
+            include_base_systems: !this.state.include_base_systems,
+            bank_systems: this.syncBankSystems(this.state.map, this.state.include_expansion_systems, !this.state.include_base_systems),
         });
     }
 
@@ -710,7 +728,7 @@ export class MapEditor extends BaseEditor {
             );
         }
 
-        let auto_complete_ratios = [(<option value="random" key="random">B/R Target Ratio: Random</option>)];
+        let auto_complete_ratios = [(<option value="random" key="random">Blue/Red Target Ratio: Random</option>)];
         let red_total = this.state.map.getRedSystemTotal();
         let blue_total = this.state.map.getBlueSystemTotal();
         let open_spaces = this.state.map.getOpenSpacesTotal();
@@ -723,7 +741,7 @@ export class MapEditor extends BaseEditor {
                         value={s+blue_total}
                         key={s+blue_total}
                     >
-                        B/R Target Ratio: {s+blue_total}/{open_spaces-s+red_total}
+                        Blue/Red Target Ratio: {s+blue_total}/{open_spaces-s+red_total}
                     </option>
                 ));
             }
@@ -924,6 +942,7 @@ export class MapEditor extends BaseEditor {
                                         !this.state.map.isLegal()
                                         || this.state.map.isComplete()
                                         || this.state.long_op===true
+										|| this.state.bank_systems.systems.length < this.state.map.getTotalOpen()
                                     }
                                     className="button is-small is-primary"
                                 >
@@ -984,6 +1003,8 @@ export class MapEditor extends BaseEditor {
                             systems={this.state.bank_systems}
                             include_expansion_systems={this.state.include_expansion_systems}
                             toggleExpansion={()=>this.toggleExpansion()}
+							include_base_systems={this.state.include_base_systems}
+							toggleBaseSystems={()=>this.toggleBaseSystems()}
                             active_system={this.state.selected_bank_system}
                             setActiveSystem={(system)=>this.setActiveBankSystem(system)}
                             system_format={this.state.system_format}
@@ -992,6 +1013,12 @@ export class MapEditor extends BaseEditor {
                             onSystemDropped={(event)=>this.onSystemDropped(event,null)}
                             eval_variables={this.state.eval_variables}
                         />
+						<div className="stats-container">
+							<p>Blue/Red: {this.state.map.getBlueSystemTotal()}/{this.state.map.getRedSystemTotal()}</p>
+							<p>Resources/Influence: {this.state.map.getTotalResources()}/{this.state.map.getTotalInfluence()}</p>
+							<p>Tech: {this.state.map.getTotalTechSpecialties()}</p>
+							<p>Traits R/G/B: {this.state.map.getPlanetTraitTotals()}</p>
+						</div>
                     </div>
                     <div className="column map-container">
                         <MapComponent

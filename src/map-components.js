@@ -35,6 +35,9 @@ export class SystemBankComponent extends React.Component {
     handleExpansionCheckboxChange(e) {
         this.props.toggleExpansion();
     }
+    handleBaseCheckboxChange(e) {
+        this.props.toggleBaseSystems();
+    }
 
     selectNoSystems() {
         this.props.setActiveSystem(null);
@@ -79,6 +82,15 @@ export class SystemBankComponent extends React.Component {
                     <label className="label">
                         System Bank
                     </label>
+		            <p className="control">
+		                <input
+		                    id="include-base-systems"
+		                    type="checkbox"
+		                    checked={this.props.include_base_systems}
+		                    onChange={(e)=>this.handleBaseCheckboxChange(e)}
+		                />
+		                <label htmlFor="include-base-systems"> Base Systems</label>
+		            </p>
                     <p className="control">
                         <input
                             id="include-expansion-systems"
@@ -228,7 +240,7 @@ export class HexComponent extends React.Component {
                 <svg className="shape-container">
                     <polygon
                         onClick={()=>this.props.onClick()}
-                        className={"hexagon "+this.props.hexClass}
+                        className={(this.props.outlined ? "outlined ": "")+"hexagon "+this.props.hexClass}
                         points={
                             (hexSize)+", "+(hexSize*.433)+" "+
                             (hexSize*.75)+", "+(hexSize*.866)+" "+
@@ -450,7 +462,7 @@ export class SystemComponent extends React.Component {
         let id_div = (<div className="id">{system.id}</div>);
         let extras = [];
         let value_div = null;
-        if(this.props.eval_variables && system.isBlue()) {
+        if(this.props.eval_variables && system.planets.length>0) {
             value_div = (<div className="value">={system.evaluate(this.props.eval_variables)}</div>);
         }
         if(system.wormhole !== null) {
@@ -501,6 +513,7 @@ export class SystemComponent extends React.Component {
             onDrag:(event)=>this.props.onDrag(event),
             onDragEnd:(event)=>this.props.onDragEnd(event),
             onDrop:(event)=>this.props.onDrop(event),
+			outlined:system.isLegendary() || system.isMecatolRexSystem(),
         };
 
         switch(format) {
@@ -642,6 +655,10 @@ export class PlanetComponent extends React.Component {
             default:
                 break;
         }
+		let legendary_class = "";
+		if(planet.name==="Primor" || planet.name==="Hope's End") {
+			legendary_class = " legendary";
+		}
         let name_stuff = null;
         if(
             format===PLANET_FORMATS.STREAMLINED_WITH_NAME
@@ -668,7 +685,7 @@ export class PlanetComponent extends React.Component {
             )
         }
         return (
-            <div className={"planet "+trait_class+" "+tech_class}>
+            <div className={"planet "+trait_class+" "+tech_class+legendary_class}>
                 {values}
                 {name_stuff}
             </div>

@@ -27,6 +27,14 @@ h1 {padding:1rem;}
   }
 }
 
+.stats-container {
+	font-size: 11px;
+	p {
+		margin: 0;
+		padding: 0;
+	}
+}
+
 .for-message {
   font-size:.6rem;
   width:100%;
@@ -186,6 +194,7 @@ h1 {padding:1rem;}
   align-items: center;
   box-sizing: border-box;
   position: relative;
+ 
 
   @include md-up {
       width: $mdPlanetSize; height: $mdPlanetSize;
@@ -453,6 +462,9 @@ h1 {padding:1rem;}
 
 .hexagon {
   fill: #000264;
+  &.outlined {
+	  fill: #0000bb;
+  }
 }
 
 .hexagon.open {
