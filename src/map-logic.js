@@ -376,6 +376,92 @@ export class Map {
         }
         return null;
     }
+	
+	findSpaceDistance(space_a, space_b, max=5) {
+		let checked_spaces = [space_a];
+		let new_to_check_adj = [space_a];
+		for(let i=0; i<=max; i++) {
+			if(areCoordsInList(space_b, checked_spaces)) {
+				return i;
+			}
+			let new_new_check = [];
+			for(let one_space of new_to_check_adj) {
+				let new_adj = this.getAdjacentSpacesIncludingWormholes(one_space);
+				for(let one_adj of new_adj) {
+					if(!areCoordsInList(one_adj, checked_spaces)) {
+						checked_spaces.push(one_adj);
+						new_new_check.push(one_adj);
+					}
+				}
+			}
+			new_to_check_adj = new_new_check;
+		}
+		return max+1;
+	}
+	
+	getHomeSystemStats() {
+		let stats = [];
+		let nonhomes = [];
+		for(let space of this.spaces) {
+			if(space.type===MAP_SPACE_TYPES.HOME) {
+				stats.push({home: space, slice: []});
+			} else if(space.type===MAP_SPACE_TYPES.SYSTEM && space.system.planets.length>0) {
+				nonhomes.push(space)
+			}
+		}
+		for(let space of nonhomes) {
+			let best = 50;
+			let winner = null;
+			for(let i=0;i<stats.length;i++) {
+				let dis = this.findSpaceDistance(stats[i].home, space);
+				if(dis < best) {
+					best = dis;
+					winner = i;
+				} else if(dis===best) {
+					winner = null;
+				}
+			}
+			if(winner !== null) {
+				stats[winner].slice.push(space);
+			}
+		}
+		let final_stats = [];
+		for(let one_stat of stats) {
+			let resources = 0;
+			let influence = 0;
+			let techs = "";
+			for(let one_system of one_stat.slice) {
+				for(let one_planet of one_system.system.planets) {
+					resources += one_planet.resources;
+					influence += one_planet.influence;
+					switch(one_planet.tech_specialty) {
+		                case TECH_SPECIALTIES.WARFARE:
+		                    techs += "R";
+		                    break;
+		                case TECH_SPECIALTIES.PROPULSION:
+		                    techs += "B";
+		                    break;
+		                case TECH_SPECIALTIES.BIOTIC:
+		                    techs += "G";
+		                    break;
+		                case TECH_SPECIALTIES.CYBERNETIC:
+		                    techs += "Y";
+		                    break;
+						default:
+							break;
+					}
+				}
+			}
+			techs = techs.split("").sort().join("");
+			final_stats.push({
+				x: one_stat.home.x, 
+				y: one_stat.home.y,
+				z: one_stat.home.z,
+				stats: resources+"/"+influence+" "+techs,
+			});
+		}
+		return final_stats;
+	}
 
     getOpenSpacesTotal() {
         let total = 0;

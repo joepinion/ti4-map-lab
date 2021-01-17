@@ -1,6 +1,7 @@
 import React from 'react';
 import {ANOMALIES, PLANET_TRAITS, TECH_SPECIALTIES, WORMHOLES} from "./data/tile_data";
 import {warp_configs, WARP_DIRECTIONS} from "./data/warp_data";
+import {getObjFromCoord} from './map-logic';
 
 const hexSpace = 6;
 
@@ -153,6 +154,7 @@ export class MapComponent extends React.Component {
 
 
     render() {
+		let home_stats = this.props.map.getHomeSystemStats();
         let hexSize = this.state.hexSize;
         let cw = 5.5;
         let ch = 7;
@@ -171,6 +173,7 @@ export class MapComponent extends React.Component {
                 if(!space.system.isMecatolRexSystem()) is_draggable=true;
             }
             let home_value = null;
+			let these_stats = null;
             if(
                 space.type===MAP_SPACE_TYPES.HOME
                 &&
@@ -180,7 +183,10 @@ export class MapComponent extends React.Component {
             ) {
                 home_value = this.props.home_values[index.toString()];
             }
-
+			if(space.type===MAP_SPACE_TYPES.HOME) {
+				let stat_container = getObjFromCoord(space, home_stats);
+				if(stat_container) these_stats = stat_container.stats;
+			}
             display.push(
                 <MapSpaceComponent
                     space={space}
@@ -196,6 +202,7 @@ export class MapComponent extends React.Component {
                     onDrop={(event)=>{if(this.props.systems_draggable) this.props.onSystemDropped(event, index);}}
                     eval_variables={this.props.eval_variables}
                     home_value={home_value}
+					home_stats={these_stats}
                 />
             );
         }
@@ -310,9 +317,9 @@ export class MapSpaceComponent extends React.Component {
                 );
                 break;
             case MAP_SPACE_TYPES.HOME:
-                let home_text = "H";
+                let home_text = null
                 if(this.props.home_value !== null) {
-                    home_text = this.props.home_value;
+                    home_text = (<div>{this.props.home_value}</div>);
                 }
                 display = (
                     <HexComponent
@@ -321,7 +328,7 @@ export class MapSpaceComponent extends React.Component {
                         hexSize={this.props.hexSize}
                         hexClass="home"
                     >
-                        {home_text}
+                        {home_text}<div>{this.props.home_stats}</div>
                     </HexComponent>
                 );
                 break;

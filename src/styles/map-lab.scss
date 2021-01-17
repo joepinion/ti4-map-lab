@@ -398,6 +398,10 @@ h1 {padding:1rem;}
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+	&.home {
+		flex-direction: column;
+		justify-content: center;
+	}
       @include md-up {
         width: $mdHexSize*.9;
         left: $mdHexSize*.05;
