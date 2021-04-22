@@ -27,7 +27,7 @@ window.jQuery = $;
 const LOOPS_TO_TRY = 10000;
 
 /// Load a map string from the #STRING url parameter, or the empty string
-/// if there is no such 
+/// if there is no such parameter, or if it's malformed
 const load_initial_map_string = () => {
     const url = new URL(window.location.href);
     const hash = url.hash;
