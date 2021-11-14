@@ -143,7 +143,7 @@ export class System {
     getDistanceModifier(variables = {}) {
         let v = variables.data;
         let value = v.DISTANCE_MOD_BASE;
-        if(this.isBlue()) {
+        if(this.isBlue() || this.isMecatolRexSystem()) {
             if(v.DISTANCE_MOD_PLANET===false) return false;
             value+=v.DISTANCE_MOD_PLANET;
             if(this.wormhole!==null) {

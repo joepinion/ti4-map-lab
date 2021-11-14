@@ -97,7 +97,7 @@ export class MapEditor extends BaseEditor {
                     || include_expansion_systems
                 )
                 && (
-                    system.id>59
+                    system.id>=59
                     || include_base_systems
                 )
             ) {
