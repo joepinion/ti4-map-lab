@@ -26,6 +26,36 @@ import {
 window.jQuery = $;
 const LOOPS_TO_TRY = 10000;
 
+/// Load a map string from the #STRING url parameter, or the empty string
+/// if there is no such parameter, or if it's malformed
+const load_initial_map_string = () => {
+    const url = new URL(window.location.href);
+    const hash = url.hash;
+    const match = hash.match(/^#?(\d+(?:-\d+)*)$/);
+
+    if(!match) {
+        return ""
+    }
+
+    const map_string = match[1];
+    const components = map_string.split('-');
+
+    // Ensure that each component is an int
+    if (!components.every(c => /^\d+/.test(c))) {
+        return "";
+    }
+
+    return components.join(" ");
+}
+
+/// Add the map string to the URL
+const set_map_string_url = map_string => {
+    const encoded = map_string.trim().split(/\s+/).join("-");
+    const url = new URL(window.location.href);
+    url.hash = encoded;
+    window.location.href = url;
+}
+
 export class MapEditor extends BaseEditor {
     constructor(props) {
         super(props);
@@ -60,6 +90,13 @@ export class MapEditor extends BaseEditor {
         }
     }
 
+    componentDidMount() {
+        const initial_map_string = load_initial_map_string();
+        if(initial_map_string) {
+            this.loadMapFromString(initial_map_string)
+        }
+    }
+
     setMap(new_map, home_values=null, balance_difference=null, eval_var=null) {
         if(new_map.isComplete()) {
             if(home_values===null) {
@@ -73,13 +110,16 @@ export class MapEditor extends BaseEditor {
             home_values = {};
             balance_difference = null;
         }
+        const map_string = this.getMapString(new_map);
+
         this.setState({
             "map": new_map,
             "bank_systems": this.syncBankSystems(new_map),
             "home_values": home_values,
             "balance_difference": balance_difference,
-            "map_string": this.getMapString(new_map),
+            "map_string": map_string,
         });
+        set_map_string_url(map_string);
     }
 
     syncBankSystems(map, include_expansion_systems=null, include_base_systems=null) {
@@ -804,14 +844,12 @@ export class MapEditor extends BaseEditor {
                                         type="text"
                                         id="layout-title"
                                         value={this.state.input_title}
-                                        onChange={function() {
-                                            this.setState(
-                                                {
-                                                    "input_title": document.getElementById("layout-title").value,
-                                                    "message": ""
-                                                }
-                                            );
-                                        }.bind(this)}
+                                        onChange={event => {
+                                            this.setState({
+                                                "input_title": event.target.value,
+                                                "message": ""
+                                            });
+                                        }}
                                     />
                                 </p>
                                 <p className="control">
@@ -882,14 +920,12 @@ export class MapEditor extends BaseEditor {
                                         type="text"
                                         id="map-string"
                                         value={this.state.map_string}
-                                        onChange={function() {
-                                            this.setState(
-                                                {
-                                                    "map_string": document.getElementById("map-string").value,
-                                                    "message": ""
-                                                }
-                                            );
-                                        }.bind(this)}
+                                        onChange={event => {
+                                            this.setState({
+                                                "map_string": event.target.value,
+                                                "message": ""
+                                            });
+                                        }}
                                     />
                                 </p>
                                 <p className="control">

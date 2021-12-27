@@ -628,40 +628,34 @@ export class Map {
     }
 
     isComplete() {
-        for(let map_space of this.spaces) {
-            if(map_space.type===MAP_SPACE_TYPES.OPEN) {
-                return false;
-            }
-        }
-        return true;
+        return this.spaces.every(map_space => map_space.type !== MAP_SPACE_TYPES.OPEN)
     }
 	
 	getTotalOpen() {
 		return this.spaces.filter(space=>space.type===MAP_SPACE_TYPES.OPEN).length
 	}
 
+    // The map is legal if:
+    // - there are no adjacent matching wormholes
+    // - there are no adjacent anomalies
     isLegal() {
-        let is_legal = true;
         for(let map_space of this.spaces) {
             if(map_space.type===MAP_SPACE_TYPES.SYSTEM && map_space.system.wormhole !== null) {
                 for(let one_sys of this.getAdjacentSystems(map_space)) {
                     if(one_sys.type===MAP_SPACE_TYPES.SYSTEM && one_sys.system.wormhole===map_space.system.wormhole) {
-                        is_legal = false;
-                        break;
+                        return false;
                     }
                 }
             }
             if(map_space.type===MAP_SPACE_TYPES.SYSTEM && map_space.system.anomaly !== null) {
                 for(let one_sys of this.getAdjacentSystems(map_space)) {
                     if(one_sys.type===MAP_SPACE_TYPES.SYSTEM && one_sys.system.anomaly!==null) {
-                        is_legal = false;
-                        break;
+                        return false;
                     }
                 }
             }
-            if(!is_legal) break;
         }
-        return is_legal;
+        return true;
     }
 
     getHomeValue(space, variables) {
