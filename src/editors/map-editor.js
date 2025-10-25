@@ -428,12 +428,13 @@ export class MapEditor extends BaseEditor {
                 break;
             }
         }
-        let message = "Unable to find a legal completion of this map.";
-        if(gotamap) {
+        if (!gotamap) {
+            this.autoComplete()
+        }
+        else {
             this.setMap(map_history[map_history.length-1].map);
-            message = "Map completed randomly.";
             this.setState({
-                "message": message,
+                "message":  "Map completed randomly.",
                 "selected_bank_system": null,
                 "long_op": false,
             });
@@ -611,14 +612,13 @@ export class MapEditor extends BaseEditor {
             let new_map = null;
             let new_hv = null;
             let new_diff = null;
+            // Precompute evaluations once
+            const evaluations = Object.fromEntries(
+                eligible_system_spaces.map(i => [i, this.state.map.spaces[i].system.evaluate(this.state.eval_variables)])
+            );
             for(let a=0; a<eligible_system_spaces.length; a++) {
                 for(let b=0; b<eligible_system_spaces.length; b++) {
-                    if(
-						a!==b 
-						&&
-						this.state.map.spaces[eligible_system_spaces[a]].system.evaluate(this.state.eval_variables)
-						!== this.state.map.spaces[eligible_system_spaces[b]].system.evaluate(this.state.eval_variables)
-					) {
+                    if(a!==b  && evaluations[a] !== evaluations[b]) {
                         new_map = this.state.map.makeCopy();
                         let replaced_system = new_map.spaces[eligible_system_spaces[b]].system;
                         new_map.spaces[eligible_system_spaces[b]].system = new_map.spaces[eligible_system_spaces[a]].system;

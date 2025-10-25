@@ -712,24 +712,23 @@ export class Map {
 
     getHomeValue(space, variables) {
         let home_total = 0;
-        let spaces_to_get_to = [];
         for(let one_space of this.spaces) {
             if(
                 one_space.type===MAP_SPACE_TYPES.SYSTEM &&
-                one_space.system.evaluate(variables) > 0 &&
-				getCoordsDistance(space, one_space) < 5
+                getCoordsDistance(space, one_space) < 5
+				
             ) {
-                spaces_to_get_to.push(one_space);
-            }
-        }
-        for(let one_space of spaces_to_get_to) {
-            let shortest_distance = this._getShortestModdedDistance(
-                space, one_space, variables
-            );
-            if(!(shortest_distance===null)) {
-                home_total+=getDistanceMultiplier(
-                    shortest_distance, variables
-                )*one_space.system.evaluate(variables);
+                let evaluation = one_space.system.evaluate(variables)
+                if (evaluation > 0) {
+                    let shortest_distance = this._getShortestModdedDistance(
+                        space, one_space, variables
+                    );
+                    if(shortest_distance!==null) {
+                        home_total+=getDistanceMultiplier(
+                            shortest_distance, variables
+                        )*evaluation;
+                    }
+                }
             }
         }
         return home_total;
