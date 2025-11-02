@@ -37,7 +37,7 @@ export class MapEditor extends BaseEditor {
         this.state.option_pair_wormholes = true;
         this.state.option_include_all_wormholes = true;
         this.state.target_blue_total = "random";
-        this.state.bank_systems = this.syncBankSystems(starting_layout, true, true);
+        this.state.bank_systems = this.syncBankSystems(starting_layout, true, true, true);
         this.state.eval_option="default_0";
         this.state.eval_variables=default_variables[0];
         this.state.home_values = {};
@@ -48,7 +48,8 @@ export class MapEditor extends BaseEditor {
             "dont_move_anomalies": false,
             "dont_move_empty": false,
         };
-        this.state.include_expansion_systems = true;
+        this.state.include_pok_expansion_systems = true;
+        this.state.include_te_expansion_systems = true;
 		this.state.include_base_systems = true;
         this.state.long_op = false;
         if(this.props.state_to_import) {
@@ -82,8 +83,9 @@ export class MapEditor extends BaseEditor {
         });
     }
 
-    syncBankSystems(map, include_expansion_systems=null, include_base_systems=null) {
-        if(include_expansion_systems===null) include_expansion_systems = this.state.include_expansion_systems;
+    syncBankSystems(map, include_pok_expansion_systems=null, include_te_expansion_systems=null, include_base_systems=null) {
+        if(include_pok_expansion_systems===null) include_pok_expansion_systems = this.state.include_pok_expansion_systems;
+        if(include_te_expansion_systems===null) include_te_expansion_systems = this.state.include_te_expansion_systems;
 		if(include_base_systems===null) include_base_systems = this.state.include_base_systems;
         let bank_systems = new SystemBox([], []);
         for(let system of this.system_box.systems) {
@@ -93,12 +95,9 @@ export class MapEditor extends BaseEditor {
                     || !map.containsSystem(system.id)
                 )
                 && (
-                    system.id<59
-                    || include_expansion_systems
-                )
-                && (
-                    system.id>=59
-                    || include_base_systems
+                    (system.id < 59 && include_base_systems) ||
+                    (system.id >= 59 && system.id <= 80 && include_pok_expansion_systems) ||
+                    (system.id > 80 && include_te_expansion_systems)
                 )
             ) {
                  bank_systems.systems.push(system);
@@ -429,12 +428,13 @@ export class MapEditor extends BaseEditor {
                 break;
             }
         }
-        let message = "Unable to find a legal completion of this map.";
-        if(gotamap) {
+        if (!gotamap) {
+            this.autoComplete()
+        }
+        else {
             this.setMap(map_history[map_history.length-1].map);
-            message = "Map completed randomly.";
             this.setState({
-                "message": message,
+                "message":  "Map completed randomly.",
                 "selected_bank_system": null,
                 "long_op": false,
             });
@@ -598,11 +598,11 @@ export class MapEditor extends BaseEditor {
                             || one_space.system.wormhole === null)
                         &&
                         (!this.state.balance_options.dont_move_anomalies
-                            || one_space.system.anomaly === null)
+                            || one_space.system.anomalies === null)
                         &&
                         (!this.state.balance_options.dont_move_empty
                             || one_space.system.wormhole !== null
-                            || one_space.system.anomaly !== null
+                            || one_space.system.anomalies !== null
                             || one_space.system.planets.length > 0)
                     ) eligible_system_spaces.push(index);
                 }
@@ -612,14 +612,13 @@ export class MapEditor extends BaseEditor {
             let new_map = null;
             let new_hv = null;
             let new_diff = null;
+            // Precompute evaluations once
+            const evaluations = Object.fromEntries(
+                eligible_system_spaces.map(i => [i, this.state.map.spaces[i].system.evaluate(this.state.eval_variables)])
+            );
             for(let a=0; a<eligible_system_spaces.length; a++) {
                 for(let b=0; b<eligible_system_spaces.length; b++) {
-                    if(
-						a!==b 
-						&&
-						this.state.map.spaces[eligible_system_spaces[a]].system.evaluate(this.state.eval_variables)
-						!== this.state.map.spaces[eligible_system_spaces[b]].system.evaluate(this.state.eval_variables)
-					) {
+                    if(a!==b  && evaluations[a] !== evaluations[b]) {
                         new_map = this.state.map.makeCopy();
                         let replaced_system = new_map.spaces[eligible_system_spaces[b]].system;
                         new_map.spaces[eligible_system_spaces[b]].system = new_map.spaces[eligible_system_spaces[a]].system;
@@ -694,17 +693,39 @@ export class MapEditor extends BaseEditor {
         return options;
     }
 
-    toggleExpansion() {
+    togglePoKExpansion() {
         this.setState({
-            include_expansion_systems: !this.state.include_expansion_systems,
-            bank_systems: this.syncBankSystems(this.state.map, !this.state.include_expansion_systems, this.state.include_base_systems),
+            include_pok_expansion_systems: !this.state.include_pok_expansion_systems,
+            bank_systems: this.syncBankSystems(
+                this.state.map,
+                !this.state.include_pok_expansion_systems,
+                this.state.include_te_expansion_systems,
+                this.state.include_base_systems
+            ),
+        });
+    }
+
+    toggleTEExpansion() {
+        this.setState({
+            include_te_expansion_systems: !this.state.include_te_expansion_systems,
+            bank_systems: this.syncBankSystems(
+                this.state.map,
+                this.state.include_pok_expansion_systems,
+                !this.state.include_te_expansion_systems,
+                this.state.include_base_systems
+            ),
         });
     }
 	
     toggleBaseSystems() {
         this.setState({
             include_base_systems: !this.state.include_base_systems,
-            bank_systems: this.syncBankSystems(this.state.map, this.state.include_expansion_systems, !this.state.include_base_systems),
+            bank_systems: this.syncBankSystems(
+                this.state.map,
+                this.state.include_expansion_systems,
+                this.state.include_te_expansion_systems,
+                !this.state.include_base_systems
+            ),
         });
     }
 
@@ -1001,8 +1022,10 @@ export class MapEditor extends BaseEditor {
                         </div>
                         <SystemBankComponent
                             systems={this.state.bank_systems}
-                            include_expansion_systems={this.state.include_expansion_systems}
-                            toggleExpansion={()=>this.toggleExpansion()}
+                            include_pok_expansion_systems={this.state.include_pok_expansion_systems}
+                            togglePoKExpansion={()=>this.togglePoKExpansion()}
+                            include_te_expansion_systems={this.state.include_te_expansion_systems}
+                            toggleTEExpansion={()=>this.toggleTEExpansion()}
 							include_base_systems={this.state.include_base_systems}
 							toggleBaseSystems={()=>this.toggleBaseSystems()}
                             active_system={this.state.selected_bank_system}

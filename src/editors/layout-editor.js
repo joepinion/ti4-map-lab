@@ -200,7 +200,7 @@ export class LayoutEditor extends BaseEditor {
                     ||
                     (one_system.wormhole!==null && this.state.show_wormholes)
                     ||
-                    (one_system.anomaly!==null && this.state.show_anomalies)
+                    (one_system.anomalies!==null && this.state.show_anomalies)
                 )
             ) {
                 eligible_systems.push(one_system);

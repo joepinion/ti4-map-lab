@@ -22,6 +22,7 @@ export const EVAL_ASPECTS = {
     "NONMATCHING_PLANETS_MOD": "NONMATCHING_PLANETS_MOD",
     "MECATOL_REX_SYS_MOD": "MECATOL_REX_SYS_MOD",
     "LEGENDARY_PLANET_SYS_MOD": "LEGENDARY_PLANET_SYS_MOD",
+    "SPACE_STATION_SYS_MOD": "SPACE_STATION_SYS_MOD",
     "DISTANCE_MOD_BASE": "DISTANCE_MOD_BASE",
     "DISTANCE_MOD_PLANET": "DISTANCE_MOD_PLANET",
     "DISTANCE_MOD_EMPTY": "DISTANCE_MOD_EMPTY",
@@ -31,6 +32,7 @@ export const EVAL_ASPECTS = {
     "DISTANCE_MOD_EMPTY_WORMHOLE": "DISTANCE_MOD_EMPTY_WORMHOLE",
     "DISTANCE_MOD_PLANET_WORMHOLE": "DISTANCE_MOD_PLANET_WORMHOLE",
     "DISTANCE_MOD_NEBULA": "DISTANCE_MOD_NEBULA",
+    "DISTANCE_MOD_ENTROPIC_SCAR": "DISTANCE_MOD_ENTROPIC_SCAR",
     "DISTANCE_MOD_ADJACENT_TO_OPPONENT": "DISTANCE_MOD_ADJACENT_TO_OPPONENT",
     "DISTANCE_MULTIPLIER": "DISTANCE_MULTIPLIER",
 };
@@ -290,6 +292,13 @@ export class EvaluatorForm extends React.Component {
                         onInputChange={value => this.reportChange(EVAL_ASPECTS.LEGENDARY_PLANET_SYS_MOD, value)}
                         helperText="Number to add if the system contains a Legendary Planet."
                     />
+                    <EvaluatorLine
+                        m="+"
+                        label="Space Station System"
+                        num_value={this.props.values.SPACE_STATION_SYS_MOD}
+                        onInputChange={value => this.reportChange(EVAL_ASPECTS.SPACE_STATION_SYS_MOD, value)}
+                        helperText="Number to add if the system contains a Space Station."
+                    />
                     <h3>Home to System Distance Evaluation</h3>
                     <h4>Distance Measurement</h4>
                     <EvaluatorLine
@@ -370,6 +379,15 @@ export class EvaluatorForm extends React.Component {
                         helperText="Distance modifier for nebula systems."
                         hasNullBox
                         onNullChange={value => this.reportNullChange(EVAL_ASPECTS.DISTANCE_MOD_NEBULA, value)}
+                    />
+                    <EvaluatorLine
+                        m="+"
+                        label="Moving Through Entropic Scar"
+                        num_value={this.props.values.DISTANCE_MOD_ENTROPIC_SCAR}
+                        onInputChange={value => this.reportChange(EVAL_ASPECTS.DISTANCE_MOD_ENTROPIC_SCAR, value)}
+                        helperText="Distance modifier for entropic scar systems."
+                        hasNullBox
+                        onNullChange={value => this.reportNullChange(EVAL_ASPECTS.DISTANCE_MOD_ENTROPIC_SCAR, value)}
                     />
                     <EvaluatorLine
                         m="+"

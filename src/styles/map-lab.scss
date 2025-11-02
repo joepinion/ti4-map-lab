@@ -182,6 +182,33 @@ h1 {padding:1rem;}
   }
 }
 
+.entropic-scar {
+  width: $hexSize*.4;
+  height: $hexSize*.4;
+  background:
+    repeating-linear-gradient(
+      -60deg,
+      rgba(0, 200, 255, 0.6) 0px,
+      rgba(0, 200, 255, 0.6) 1px,
+      transparent 1px,
+      transparent 8px
+    ),
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 1));
+  
+  filter: contrast(1.4) brightness(1.1) saturate(1.5);
+  border-radius: 50%;
+  box-shadow: 0px 0px $planetSize/2 $planetSize/20 white;
+
+  @include md-up {
+    width: $mdHexSize*.4;
+    height: $mdHexSize*.4;
+  }
+  @include lg-up {
+    width: $lgHexSize*.4;
+    height: $lgHexSize*.4;
+  }
+}
+
 .planet {
   background-color: gray;
   width: $planetSize; height: $planetSize;
@@ -288,14 +315,23 @@ h1 {padding:1rem;}
     color: darkblue;
   }
 
-  &.industrial {
-    background-color: seagreen;
+  &.hazardous {
+    background-color: red;
   }
   &.cultural {
     background-color: deepskyblue;
+    &.hazardous {
+      background: linear-gradient(60deg, deepskyblue 50%, red 50%);
+    }
   }
-  &.hazardous {
-    background-color: red;
+  &.industrial {
+    background-color: seagreen;
+    &.hazardous {
+      background: linear-gradient(60deg, seagreen 50%, red 50%);
+    }
+    &.cultural {
+      background: linear-gradient(60deg, seagreen 50%, deepskyblue 50%);
+    }
   }
   &.propulsion {
     box-shadow: 0px 0px $planetSize/10 $planetSize/10 #5253ff;
@@ -333,6 +369,12 @@ h1 {padding:1rem;}
       box-shadow: 0px 0px $lgPlanetSize/10 $lgPlanetSize/10 red;
     }
   }
+}
+
+.space-station {
+  border-radius: 15%;
+  width: 40px;
+  height: 40px;
 }
 
 .map {

@@ -33,8 +33,11 @@ export class SystemBankComponent extends React.Component {
         }
     }
 
-    handleExpansionCheckboxChange(e) {
-        this.props.toggleExpansion();
+    handlePoKExpansionCheckboxChange(e) {
+        this.props.togglePoKExpansion();
+    }
+    handleTEExpansionCheckboxChange(e) {
+        this.props.toggleTEExpansion();
     }
     handleBaseCheckboxChange(e) {
         this.props.toggleBaseSystems();
@@ -94,12 +97,21 @@ export class SystemBankComponent extends React.Component {
 		            </p>
                     <p className="control">
                         <input
-                            id="include-expansion-systems"
+                            id="include-pok-systems"
                             type="checkbox"
-                            checked={this.props.include_expansion_systems}
-                            onChange={(e)=>this.handleExpansionCheckboxChange(e)}
+                            checked={this.props.include_pok_expansion_systems}
+                            onChange={(e)=>this.handlePoKExpansionCheckboxChange(e)}
                         />
-                        <label htmlFor="include-expansion-systems"> Expansion Systems</label>
+                        <label htmlFor="include-pok-systems"> Prophecy of Kings Systems</label>
+                    </p>
+                    <p className="control">
+                        <input
+                            id="include-te-systems"
+                            type="checkbox"
+                            checked={this.props.include_te_expansion_systems}
+                            onChange={(e)=>this.handleTEExpansionCheckboxChange(e)}
+                        />
+                        <label htmlFor="include-te-systems"> Thunder's Edge Systems</label>
                     </p>
                     <p className="control">
                         <span className="select is-small">
@@ -483,31 +495,41 @@ export class SystemComponent extends React.Component {
                 default: break;
             }
         }
-        if(system.anomaly !== null) {
-            switch(system.anomaly) {
-                case ANOMALIES.SUPERNOVA:
-                    extras.push(<div className="supernova" key="supernova"></div>);
-                    break;
-                case ANOMALIES.GRAVITY_RIFT:
-                    extras.push(<div className="gravity-rift" key="gravity-rift"></div>);
-                    break;
-                case ANOMALIES.NEBULA:
-                    extras.push(<div className="nebula" key="nebula"></div>);
-                    break;
-                case ANOMALIES.ASTEROID_FIELD:
-                    extras.push(
-                        <div className="asteroid-field" key="asteroid-field">
-                            <div className="asteroid a"></div>
-                            <div className="asteroid b"></div>
-                            <div className="asteroid c"></div>
-                            <div className="asteroid d"></div>
-                            <div className="asteroid e"></div>
-                        </div>
-                    );
-                    break;
-                default:
-                    break;
+        if(system.anomalies !== null) {
+            let anomalyClasses = ""
+            for(const anomaly of system.anomalies) {
+                switch(anomaly) {
+                    case ANOMALIES.SUPERNOVA:
+                        anomalyClasses += "supernova "
+                        break;
+                    case ANOMALIES.GRAVITY_RIFT:
+                        anomalyClasses += "gravity-rift "
+                        break;
+                    case ANOMALIES.NEBULA:
+                        anomalyClasses += "nebula "
+                        break;
+                    case ANOMALIES.ASTEROID_FIELD:
+                        anomalyClasses += "asteroid-field "
+                        break;
+                    case ANOMALIES.ENTROPIC_SCAR:
+                        anomalyClasses += "entropic-scar "
+                        break;
+                    default:
+                        break;
+                }
             }
+            extras.push(
+            <div className={anomalyClasses} key={anomalyClasses}>
+                { anomalyClasses.includes('asteroid-field') && (
+                <>
+                    <div className="asteroid a"></div>
+                    <div className="asteroid b"></div>
+                    <div className="asteroid c"></div>
+                    <div className="asteroid d"></div>
+                    <div className="asteroid e"></div>
+                </>
+                )}
+            </div>);
         }
         let rex_class = "";
         if(system.isMecatolRexSystem()) rex_class = "rex";
@@ -624,47 +646,57 @@ export class PlanetComponent extends React.Component {
         let format = this.props.format;
         let trait_class = "";
         let trait_abbr = "";
-        switch(planet.trait) {
-            case PLANET_TRAITS.INDUSTRIAL:
-                trait_class = "industrial";
-                trait_abbr = "I";
-                break;
-            case PLANET_TRAITS.HAZARDOUS:
-                trait_class = "hazardous";
-                trait_abbr = "H";
-                break;
-            case PLANET_TRAITS.CULTURAL:
-                trait_class="cultural";
-                trait_abbr = "C";
-                break;
-            default:
-                break;
+        if (planet.traits !== null) {
+            for (const trait of planet.traits) {
+                switch(trait) {
+                    case PLANET_TRAITS.INDUSTRIAL:
+                        trait_class += "industrial ";
+                        trait_abbr += "I ";
+                        break;
+                    case PLANET_TRAITS.HAZARDOUS:
+                        trait_class += "hazardous ";
+                        trait_abbr += "H ";
+                        break;
+                    case PLANET_TRAITS.CULTURAL:
+                        trait_class += "cultural ";
+                        trait_abbr += "C ";
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
         let tech_class = "";
         let tech_abbr = "";
-        switch(planet.tech_specialty) {
-            case TECH_SPECIALTIES.CYBERNETIC:
-                tech_class = "cybernetic";
-                tech_abbr = "Y";
-                break;
-            case TECH_SPECIALTIES.PROPULSION:
-                tech_class = "propulsion";
-                tech_abbr = "B";
-                break;
-            case TECH_SPECIALTIES.BIOTIC:
-                tech_class = "biotic";
-                tech_abbr = "G";
-                break;
-            case TECH_SPECIALTIES.WARFARE:
-                tech_class = "warfare";
-                tech_abbr = "R";
-                break;
-            default:
-                break;
+        for (const tech_specialty in planet.tech_specialties) {
+            switch(tech_specialty) {
+                case TECH_SPECIALTIES.CYBERNETIC:
+                    tech_class += "cybernetic ";
+                    tech_abbr += "Y ";
+                    break;
+                case TECH_SPECIALTIES.PROPULSION:
+                    tech_class += "propulsion ";
+                    tech_abbr += "B ";
+                    break;
+                case TECH_SPECIALTIES.BIOTIC:
+                    tech_class += "biotic ";
+                    tech_abbr += "G ";
+                    break;
+                case TECH_SPECIALTIES.WARFARE:
+                    tech_class += "warfare ";
+                    tech_abbr += "R ";
+                    break;
+                default:
+                    break;
+            }
         }
 		let legendary_class = "";
-		if(planet.name==="Primor" || planet.name==="Hope's End") {
+		if(["Primor", "Hope's End", "Faunus", "Garbozia", "Emelpar", "Tempesta", "Industrex"].includes(planet.name)) {
 			legendary_class = " legendary";
+		}
+		let space_station_class = "";
+		if(["Tsion Station", "Oluz Station", "The Watchtower"].includes(planet.name)) {
+			space_station_class = " space-station";
 		}
         let name_stuff = null;
         if(
@@ -692,7 +724,7 @@ export class PlanetComponent extends React.Component {
             )
         }
         return (
-            <div className={"planet "+trait_class+" "+tech_class+legendary_class}>
+            <div className={"planet "+trait_class+" "+tech_class+legendary_class+space_station_class}>
                 {values}
                 {name_stuff}
             </div>

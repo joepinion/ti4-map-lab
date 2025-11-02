@@ -10,8 +10,8 @@ export const PLANET_EVAL_STRATEGIES = {
 
 export class Planet {
     constructor(obj_data) {
-        this.trait = obj_data.trait;
-        this.tech_specialty = obj_data.tech_specialty;
+        this.traits = obj_data.traits;
+        this.tech_specialties = obj_data.tech_specialties;
         this.resources = obj_data.resources;
         this.influence = obj_data.influence;
         this.name = obj_data.name;
@@ -23,23 +23,27 @@ export class Planet {
         let r = this.resources*v.RESOURCES_MULTIPLIER,
             i = this.influence*v.INFLUENCE_MULTIPLIER;
         let t = 0;
-        if(this.tech_specialty!==null) {
+        if(this.tech_specialties!==null) {
             t+=v.TECH_MOD;
-            switch(this.tech_specialty) {
-                case TECH_SPECIALTIES.WARFARE:
-                    t+=v.TECH_WARFARE_MOD;
-                    break;
-                case TECH_SPECIALTIES.PROPULSION:
-                    t+=v.TECH_PROPULSION_MOD;
-                    break;
-                case TECH_SPECIALTIES.BIOTIC:
-                    t+=v.TECH_BIOTIC_MOD;
-                    break;
-                case TECH_SPECIALTIES.CYBERNETIC:
-                    t+=v.TECH_CYBERNETIC_MOD;
-                    break;
-                default:
-                    break;
+            if (this.tech_specialties !== null) {
+                for (const tech_specialty of this.tech_specialties) {
+                    switch(tech_specialty) {
+                        case TECH_SPECIALTIES.WARFARE:
+                            t+=v.TECH_WARFARE_MOD;
+                            break;
+                        case TECH_SPECIALTIES.PROPULSION:
+                            t+=v.TECH_PROPULSION_MOD;
+                            break;
+                        case TECH_SPECIALTIES.BIOTIC:
+                            t+=v.TECH_BIOTIC_MOD;
+                            break;
+                        case TECH_SPECIALTIES.CYBERNETIC:
+                            t+=v.TECH_CYBERNETIC_MOD;
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         }
         switch(v.PLANET_STRATEGY) {
@@ -60,18 +64,22 @@ export class Planet {
         }
         if(r>0) value+= v.NONZERO_RESOURCES_MOD;
         if(i>0) value+= v.NONZERO_INFLUENCE_MOD;
-        switch(this.trait) {
-            case PLANET_TRAITS.CULTURAL:
-                value+=v.TRAIT_CULTURAL_MOD;
-                break;
-            case PLANET_TRAITS.HAZARDOUS:
-                value+=v.TRAIT_HAZARDOUS_MOD;
-                break;
-            case PLANET_TRAITS.INDUSTRIAL:
-                value+=v.TRAIT_INDUSTRIAL_MOD;
-                break;
-            default:
-                break;
+        if (this.traits !== null) {
+            for (const trait of this.traits) {
+                switch(trait) {
+                    case PLANET_TRAITS.CULTURAL:
+                        value+=v.TRAIT_CULTURAL_MOD;
+                        break;
+                    case PLANET_TRAITS.HAZARDOUS:
+                        value+=v.TRAIT_HAZARDOUS_MOD;
+                        break;
+                    case PLANET_TRAITS.INDUSTRIAL:
+                        value+=v.TRAIT_INDUSTRIAL_MOD;
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
         return value;
     }
@@ -98,7 +106,7 @@ export class PlanetBox {
 export class System {
     constructor(obj_data, planet_box) {
         this.id = obj_data.id;
-        this.anomaly = obj_data.anomaly;
+        this.anomalies = obj_data.anomalies;
         this.wormhole = obj_data.wormhole;
         this.planets = [];
         for(let planet_name of obj_data.planets) {
@@ -117,7 +125,7 @@ export class System {
             value+=v.SINGLE_PLANET_MOD;
         } else if(this.planets.length===2) {
             value+=v.MULTI_PLANET_MOD;
-            if(this.planets[0].trait === this.planets[1].trait) {
+            if(this.planets[0].traits && this.planets[1].traits && this.planets[0].traits.some(trait => this.planets[1].traits.includes(trait))) {
                 value+=v.MATCHING_PLANETS_MOD;
             } else {
                 value+=v.NONMATCHING_PLANETS_MOD;
@@ -133,12 +141,19 @@ export class System {
             let legendary_mod = v.LEGENDARY_PLANET_SYS_MOD || 0;
             value+=legendary_mod;
         }
+        if(this.isSpaceStation()) {
+            let space_station_mod = v.SPACE_STATION_SYS_MOD || 0;
+            value+=space_station_mod;
+        }
         return value;
     }
 	
 	isLegendary() {
-		return this.id === 65 || this.id === 66;
+		return [65, 66, 97, 98, 99, 100, 115].includes(this.id);
 	}
+    isSpaceStation() {
+        return [109, 111, 117].includes(this.id)
+    }
 
     getDistanceModifier(variables = {}) {
         let v = variables.data;
@@ -150,7 +165,7 @@ export class System {
                 if(v.DISTANCE_MOD_PLANET_WORMHOLE===false) return false;
                 value+=v.DISTANCE_MOD_PLANET_WORMHOLE;
             }
-        } else if(this.anomaly===null) {
+        } else if(this.anomalies===null) {
             if(this.wormhole!==null) {
                 if(v.DISTANCE_MOD_EMPTY_WORMHOLE===false) return false;
                 value+=v.DISTANCE_MOD_EMPTY_WORMHOLE;
@@ -159,25 +174,33 @@ export class System {
                 value+=v.DISTANCE_MOD_EMPTY;
             }
         }
-        switch(this.anomaly) {
-            case ANOMALIES.ASTEROID_FIELD:
-                if(v.DISTANCE_MOD_ASTEROID_FIELD===false) return false;
-                value+=v.DISTANCE_MOD_ASTEROID_FIELD;
-                break;
-            case ANOMALIES.GRAVITY_RIFT:
-                if(v.DISTANCE_MOD_GRAVITY_RIFT===false) return false;
-                value+=v.DISTANCE_MOD_GRAVITY_RIFT;
-                break;
-            case ANOMALIES.NEBULA:
-                if(v.DISTANCE_MOD_NEBULA===false) return false;
-                value+=v.DISTANCE_MOD_NEBULA;
-                break;
-            case ANOMALIES.SUPERNOVA:
-                if(v.DISTANCE_MOD_SUPERNOVA===false) return false;
-                value+=v.DISTANCE_MOD_SUPERNOVA;
-                break;
-            default:
-                break;
+        if (this.anomalies !== null) {
+            for (const anomaly of this.anomalies) {
+                switch(anomaly) {
+                    case ANOMALIES.ASTEROID_FIELD:
+                        if(v.DISTANCE_MOD_ASTEROID_FIELD===false) return false;
+                        value+=v.DISTANCE_MOD_ASTEROID_FIELD;
+                        break;
+                    case ANOMALIES.GRAVITY_RIFT:
+                        if(v.DISTANCE_MOD_GRAVITY_RIFT===false) return false;
+                        value+=v.DISTANCE_MOD_GRAVITY_RIFT;
+                        break;
+                    case ANOMALIES.NEBULA:
+                        if(v.DISTANCE_MOD_NEBULA===false) return false;
+                        value+=v.DISTANCE_MOD_NEBULA;
+                        break;
+                    case ANOMALIES.SUPERNOVA:
+                        if(v.DISTANCE_MOD_SUPERNOVA===false) return false;
+                        value+=v.DISTANCE_MOD_SUPERNOVA;
+                        break;
+                    case ANOMALIES.ENTROPIC_SCAR:
+                        if(v.DISTANCE_MOD_ENTROPIC_SCAR===false) return false;
+                        value+=v.DISTANCE_MOD_ENTROPIC_SCAR;
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
         return value;
     }
@@ -190,7 +213,7 @@ export class System {
     }
 
     isRed() {
-        if(this.planets.length<1 || this.anomaly !== null) return true;
+        if(this.planets.length<1 || this.anomalies !== null) return true;
         return false;
     }
 
@@ -203,22 +226,26 @@ export class System {
         let name_array = [];
         for(let planet of system.planets) {
 			let tech = "";
-			switch(planet.tech_specialty) {
-			case TECH_SPECIALTIES.BIOTIC:
-				tech = "/G";
-				break;
-			case TECH_SPECIALTIES.WARFARE:
-				tech = "/R";
-				break;
-			case TECH_SPECIALTIES.CYBERNETIC:
-				tech = "/Y";
-				break;
-			case TECH_SPECIALTIES.PROPULSION:
-				tech = "/B";
-				break;
-			default:
-				break;
-			}
+            if (planet.tech_specialties !== null) {
+                for (const tech_specialty of planet.tech_specialties) {
+                    switch(tech_specialty) {
+                        case TECH_SPECIALTIES.BIOTIC:
+                            tech += "/G";
+                            break;
+                        case TECH_SPECIALTIES.WARFARE:
+                            tech += "/R";
+                            break;
+                        case TECH_SPECIALTIES.CYBERNETIC:
+                            tech += "/Y";
+                            break;
+                        case TECH_SPECIALTIES.PROPULSION:
+                            tech += "/B";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
             name_array.push(
 				planet.name+" ("+planet.resources+"/"+planet.influence+tech+")"
 			);
@@ -234,22 +261,29 @@ export class System {
                 default: break;
             }
         }
-        if(system.anomaly !== null) {
-            switch(system.anomaly) {
-                case ANOMALIES.SUPERNOVA:
-                    name_array.push("Supernova");
-                    break;
-                case ANOMALIES.GRAVITY_RIFT:
-                    name_array.push("Gravity Rift");
-                    break;
-                case ANOMALIES.NEBULA:
-                    name_array.push("Nebula");
-                    break;
-                case ANOMALIES.ASTEROID_FIELD:
-                    name_array.push("Asteroid Field");
-                    break;
-                default:
-                    break;
+        if(system.anomalies !== null) {
+            if (system.anomalies !== null) {
+                for (const anomaly of system.anomalies) {
+                    switch(anomaly) {
+                        case ANOMALIES.SUPERNOVA:
+                            name_array.push("Supernova");
+                            break;
+                        case ANOMALIES.GRAVITY_RIFT:
+                            name_array.push("Gravity Rift");
+                            break;
+                        case ANOMALIES.NEBULA:
+                            name_array.push("Nebula");
+                            break;
+                        case ANOMALIES.ASTEROID_FIELD:
+                            name_array.push("Asteroid Field");
+                            break;
+                        case ANOMALIES.ENTROPIC_SCAR:
+                            name_array.push("Entropic Scar");
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         }
         if(name_array.length===0) name_array.push("Empty Space");
@@ -434,22 +468,26 @@ export class Map {
 				for(let one_planet of one_system.system.planets) {
 					resources += one_planet.resources;
 					influence += one_planet.influence;
-					switch(one_planet.tech_specialty) {
-		                case TECH_SPECIALTIES.WARFARE:
-		                    techs += "R";
-		                    break;
-		                case TECH_SPECIALTIES.PROPULSION:
-		                    techs += "B";
-		                    break;
-		                case TECH_SPECIALTIES.BIOTIC:
-		                    techs += "G";
-		                    break;
-		                case TECH_SPECIALTIES.CYBERNETIC:
-		                    techs += "Y";
-		                    break;
-						default:
-							break;
-					}
+                    if (one_planet.tech_specialties !== null) {
+                        for (const tech_specialty of one_planet.tech_specialties) {
+                            switch(tech_specialty) {
+                                case TECH_SPECIALTIES.WARFARE:
+                                    techs += "R";
+                                    break;
+                                case TECH_SPECIALTIES.PROPULSION:
+                                    techs += "B";
+                                    break;
+                                case TECH_SPECIALTIES.BIOTIC:
+                                    techs += "G";
+                                    break;
+                                case TECH_SPECIALTIES.CYBERNETIC:
+                                    techs += "Y";
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
 				}
 			}
 			techs = techs.split("").sort().join("");
@@ -520,22 +558,26 @@ export class Map {
 		for(let space of this.spaces) {
 			if(space.type===MAP_SPACE_TYPES.SYSTEM) {
 				for(let planet of space.system.planets) {
-					switch(planet.tech_specialty) {
-		                case TECH_SPECIALTIES.WARFARE:
-		                    total += "R";
-		                    break;
-		                case TECH_SPECIALTIES.PROPULSION:
-		                    total += "B";
-		                    break;
-		                case TECH_SPECIALTIES.BIOTIC:
-		                    total += "G";
-		                    break;
-		                case TECH_SPECIALTIES.CYBERNETIC:
-		                    total += "Y";
-		                    break;
-						default:
-							break;
-					}
+                    if (planet.tech_specialties !== null) {
+                        for (const tech_specialty of planet.tech_specialties) {
+                            switch(tech_specialty) {
+                                case TECH_SPECIALTIES.WARFARE:
+                                    total += "R";
+                                    break;
+                                case TECH_SPECIALTIES.PROPULSION:
+                                    total += "B";
+                                    break;
+                                case TECH_SPECIALTIES.BIOTIC:
+                                    total += "G";
+                                    break;
+                                case TECH_SPECIALTIES.CYBERNETIC:
+                                    total += "Y";
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
 				}
 			}
 		}
@@ -549,19 +591,23 @@ export class Map {
 		for(let space of this.spaces) {
 			if(space.type===MAP_SPACE_TYPES.SYSTEM) {
 				for(let planet of space.system.planets) {
-					switch(planet.trait) {
-					case PLANET_TRAITS.HAZARDOUS:
-						haz++;
-						break;
-					case PLANET_TRAITS.CULTURAL:
-						cul++;
-						break;
-					case PLANET_TRAITS.INDUSTRIAL:
-						ind++;
-						break;
-					default:
-						break;
-					}
+                    if (planet.traits !== null) {
+                        for(const trait of planet.traits) {
+                            switch(trait) {
+                            case PLANET_TRAITS.HAZARDOUS:
+                                haz++;
+                                break;
+                            case PLANET_TRAITS.CULTURAL:
+                                cul++;
+                                break;
+                            case PLANET_TRAITS.INDUSTRIAL:
+                                ind++;
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                    }
 				}
 			}
 		}
@@ -651,9 +697,9 @@ export class Map {
                     }
                 }
             }
-            if(map_space.type===MAP_SPACE_TYPES.SYSTEM && map_space.system.anomaly !== null) {
+            if(map_space.type===MAP_SPACE_TYPES.SYSTEM && map_space.system.anomalies !== null) {
                 for(let one_sys of this.getAdjacentSystems(map_space)) {
-                    if(one_sys.type===MAP_SPACE_TYPES.SYSTEM && one_sys.system.anomaly!==null) {
+                    if(one_sys.type===MAP_SPACE_TYPES.SYSTEM && one_sys.system.anomalies!==null) {
                         is_legal = false;
                         break;
                     }
@@ -666,24 +712,23 @@ export class Map {
 
     getHomeValue(space, variables) {
         let home_total = 0;
-        let spaces_to_get_to = [];
         for(let one_space of this.spaces) {
             if(
                 one_space.type===MAP_SPACE_TYPES.SYSTEM &&
-                one_space.system.evaluate(variables) > 0 &&
-				getCoordsDistance(space, one_space) < 5
+                getCoordsDistance(space, one_space) < 5
+				
             ) {
-                spaces_to_get_to.push(one_space);
-            }
-        }
-        for(let one_space of spaces_to_get_to) {
-            let shortest_distance = this._getShortestModdedDistance(
-                space, one_space, variables
-            );
-            if(!(shortest_distance===null)) {
-                home_total+=getDistanceMultiplier(
-                    shortest_distance, variables
-                )*one_space.system.evaluate(variables);
+                let evaluation = one_space.system.evaluate(variables)
+                if (evaluation > 0) {
+                    let shortest_distance = this._getShortestModdedDistance(
+                        space, one_space, variables
+                    );
+                    if(shortest_distance!==null) {
+                        home_total+=getDistanceMultiplier(
+                            shortest_distance, variables
+                        )*evaluation;
+                    }
+                }
             }
         }
         return home_total;
