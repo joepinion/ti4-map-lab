@@ -48,13 +48,22 @@ export class Planet {
         }
         switch(v.PLANET_STRATEGY) {
             case PLANET_EVAL_STRATEGIES.GREATEST:
+            case "2":
                 let to_add = r;
                 if(i>to_add) to_add = i;
                 if(t>to_add) to_add = t;
                 value += to_add;
                 break;
-            case PLANET_EVAL_STRATEGIES.AVERAGE:
-                value += (r+i+t)/3;
+            case PLANET_EVAL_STRATEGIES.GREATEST_PLUS_TECH:
+            case "3":
+                let to_add_t = r;
+                if(i>to_add_t) to_add_t = i;
+                to_add_t += t;
+                value += to_add_t;
+                break;
+            case PLANET_EVAL_STRATEGIES.SUM:
+            case "1":
+                value += r+i+t;
                 break;
             default:
                 let high_one = r;
@@ -155,18 +164,18 @@ export class System {
         return [109, 111, 117].includes(this.id)
     }
 
-    getDistanceModifier(variables = {}) {
+    getDistanceModifier(variables = {}, through_wh=false) {
         let v = variables.data;
         let value = v.DISTANCE_MOD_BASE;
         if(this.isBlue() || this.isMecatolRexSystem()) {
             if(v.DISTANCE_MOD_PLANET===false) return false;
             value+=v.DISTANCE_MOD_PLANET;
-            if(this.wormhole!==null) {
+            if(this.wormhole!==null && through_wh) {
                 if(v.DISTANCE_MOD_PLANET_WORMHOLE===false) return false;
                 value+=v.DISTANCE_MOD_PLANET_WORMHOLE;
             }
         } else if(this.anomalies===null) {
-            if(this.wormhole!==null) {
+            if(this.wormhole!==null && through_wh) {
                 if(v.DISTANCE_MOD_EMPTY_WORMHOLE===false) return false;
                 value+=v.DISTANCE_MOD_EMPTY_WORMHOLE;
             } else {
@@ -805,10 +814,16 @@ export class Map {
 
     _calculateModdedDistanceFromRaw(path, variables, start_space) {
         let modded_dist = 0;
-        for(let one_index of path) {
+        for(let [x, one_index] of path.entries()) {
             let one_sys = this.getSpaceBySystemID(one_index);
+            let wh = false;
+            if(x>0) {
+                if(!areCoordsInList(one_sys, this.getAdjacentSpaces(start_space))) {
+                    wh = true;
+                }
+            }
             modded_dist+=
-                one_sys.system.getDistanceModifier(variables)
+                one_sys.system.getDistanceModifier(variables, wh)
                 +this.getMapDistanceModifier(start_space, one_sys, variables);
         }
         return modded_dist;
@@ -819,8 +834,7 @@ export class Map {
         for(let one_space of adj_spaces) {
             if(
                 one_space.type===MAP_SPACE_TYPES.HOME &&
-                !areCoordsInList(start_space, [one_space]
-                )
+                !areCoordsInList(start_space, [one_space])
             ) {
                 return variables.data.DISTANCE_MOD_ADJACENT_TO_OPPONENT;
             }
