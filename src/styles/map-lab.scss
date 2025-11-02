@@ -369,6 +369,33 @@ h1 {padding:1rem;}
       box-shadow: 0px 0px $lgPlanetSize/10 $lgPlanetSize/10 red;
     }
   }
+  &.cybernetic-warfare {
+    box-shadow: 
+      0px 0px $planetSize/16 $planetSize/16 yellow,
+      0px 0px $planetSize/5 $planetSize/5 red;
+    @include md-up {
+      box-shadow: 
+        0px 0px $mdPlanetSize/16 $mdPlanetSize/16 yellow,
+        0px 0px $mdPlanetSize/5 $mdPlanetSize/5 red;
+    }
+    @include lg-up {
+      box-shadow: 
+        0px 0px $lgPlanetSize/16 $lgPlanetSize/16 yellow,
+        0px 0px $lgPlanetSize/5 $lgPlanetSize/5 red;
+    }
+  }
+  &.cybernetic-cybernetic {
+    box-shadow: 
+      0px 0px $planetSize/5 $planetSize/5 yellow;
+    @include md-up {
+      box-shadow: 
+        0px 0px $mdPlanetSize/5 $mdPlanetSize/5 yellow;
+    }
+    @include lg-up {
+      box-shadow: 
+        0px 0px $lgPlanetSize/5 $lgPlanetSize/5 yellow;
+    }
+  }
 }
 
 .space-station {

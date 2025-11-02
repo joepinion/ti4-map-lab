@@ -476,7 +476,7 @@ export let planet_data = [
     },
     {
         "name": "Tempesta",
-        "traits": [PLANET_TRAITS.CULTURAL],
+        "traits": [PLANET_TRAITS.HAZARDOUS],
         "tech_specialties": [TECH_SPECIALTIES.PROPULSION],
         "resources": 1,
         "influence": 1,
@@ -490,8 +490,8 @@ export let planet_data = [
     },
     {
         "name": "Andeara",
-        "traits": [PLANET_TRAITS.CULTURAL],
-        "tech_specialties": null,
+        "traits": [PLANET_TRAITS.INDUSTRIAL],
+        "tech_specialties": [TECH_SPECIALTIES.PROPULSION],
         "resources": 1,
         "influence": 1,
     },
@@ -623,7 +623,7 @@ export let planet_data = [
     },
     {
         "name": "Lemox",
-        "traits": [PLANET_TRAITS.CULTURAL],
+        "traits": [PLANET_TRAITS.INDUSTRIAL],
         "tech_specialties": null,
         "resources": 0,
         "influence": 3,

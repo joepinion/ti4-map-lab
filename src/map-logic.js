@@ -149,7 +149,7 @@ export class System {
     }
 	
 	isLegendary() {
-		return [65, 66, 97, 98, 99, 100, 115].includes(this.id);
+		return [18, 65, 66, 97, 98, 99, 100, 115].includes(this.id);
 	}
     isSpaceStation() {
         return [109, 111, 117].includes(this.id)

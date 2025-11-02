@@ -668,26 +668,30 @@ export class PlanetComponent extends React.Component {
         }
         let tech_class = "";
         let tech_abbr = "";
-        for (const tech_specialty in planet.tech_specialties) {
-            switch(tech_specialty) {
-                case TECH_SPECIALTIES.CYBERNETIC:
-                    tech_class += "cybernetic ";
-                    tech_abbr += "Y ";
-                    break;
-                case TECH_SPECIALTIES.PROPULSION:
-                    tech_class += "propulsion ";
-                    tech_abbr += "B ";
-                    break;
-                case TECH_SPECIALTIES.BIOTIC:
-                    tech_class += "biotic ";
-                    tech_abbr += "G ";
-                    break;
-                case TECH_SPECIALTIES.WARFARE:
-                    tech_class += "warfare ";
-                    tech_abbr += "R ";
-                    break;
-                default:
-                    break;
+        if(planet.tech_specialties) {
+            let scount = planet.tech_specialties.length;
+            for (const [x, tech_specialty] of planet.tech_specialties.entries()) {
+                let sffx = scount>1 && x<scount-1 ? "-" : " ";
+                switch(tech_specialty) {
+                    case TECH_SPECIALTIES.CYBERNETIC:
+                        tech_class += "cybernetic"+sffx;
+                        tech_abbr += "Y ";
+                        break;
+                    case TECH_SPECIALTIES.PROPULSION:
+                        tech_class += "propulsion"+sffx;
+                        tech_abbr += "B ";
+                        break;
+                    case TECH_SPECIALTIES.BIOTIC:
+                        tech_class += "biotic"+sffx;
+                        tech_abbr += "G ";
+                        break;
+                    case TECH_SPECIALTIES.WARFARE:
+                        tech_class += "warfare"+sffx;
+                        tech_abbr += "R ";
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 		let legendary_class = "";
